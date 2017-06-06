@@ -56,11 +56,11 @@
 
 @section('pageScript')
 <script>
-$('#soffitLinearFeet').change( function() {
+$('#soffitLinearFeet').on('change keyup paste', function() {
 	updateSoffit();
 });
 
-$('#soffitDepth').change( function() {
+$('#soffitDepth').on('change keyup paste', function() {
 	updateSoffit();
 });
 

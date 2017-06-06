@@ -10,7 +10,6 @@
         <!-- Styles 
         <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
         -->
-        
         <!-- Scripts -->
         <script>
         window.Laravel = {!! json_encode([
