@@ -102,7 +102,7 @@ function updateSoffit()
 
 function soffitSetResults( pieces, piecesPerSheet, soffitSheets )
 {
-	$('#soffitPiecesResult').text(	Math.ceil( pieces ) +
+	$('#soffitPiecesResult').text(	Math.floor( pieces ) +
 									' (' + pieces + ')' );
 
 	$('#soffitSheetsResult').text(	Math.ceil( piecesPerSheet ) +
