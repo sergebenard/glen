@@ -12,12 +12,12 @@
 			
 			<div class="form-group">
 				<label for="soffitLinearFeet">Linear Feet</label>
-				<input type="number" class="form-control" id="soffitLinearFeet" aria-describedby="soffitLinearFeetHelp" placeholder="Feet" min="0.01">
+				<input type="number" class="form-control" id="soffitLinearFeet" aria-describedby="soffitLinearFeetHelp" placeholder="Feet" min="1" max="1000">
 				<small id="soffitLinearFeetHelp" class="form-text text-muted">Enter how many linear feet of soffit coverage you're estimating for your project.</small>
 			</div>
 			<div class="form-group">
 				<label for="soffitDepth">Soffit Depth</label>
-				<input type="number" class="form-control" id="soffitDepth" aria-describedby="soffitDepthHelp" placeholder="Inches" min="0.01">
+				<input type="number" class="form-control" id="soffitDepth" aria-describedby="soffitDepthHelp" placeholder="Inches" min="1" max="144">
 				<small id="soffitDepthHelp" class="form-text text-muted">Enter how many inches you're estimating for the depth of the soffit.</small>
 			</div>
 		</div>
