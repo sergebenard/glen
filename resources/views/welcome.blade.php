@@ -12,12 +12,12 @@
 			
 			<div class="form-group">
 				<label for="soffitLinearFeet">Linear Feet</label>
-				<input type="number" class="form-control" id="soffitLinearFeet" aria-describedby="soffitLinearFeetHelp" placeholder="Feet" min="1" max="1000">
+				<input type="number" class="form-control" id="soffitLinearFeet" aria-describedby="soffitLinearFeetHelp" placeholder="Feet" min="1" max="1000" maxlength="3">
 				<small id="soffitLinearFeetHelp" class="form-text text-muted">Enter how many linear feet of soffit coverage you're estimating for your project.</small>
 			</div>
 			<div class="form-group">
 				<label for="soffitDepth">Soffit Depth</label>
-				<input type="number" class="form-control" id="soffitDepth" aria-describedby="soffitDepthHelp" placeholder="Inches" min="1" max="144">
+				<input type="number" class="form-control" id="soffitDepth" aria-describedby="soffitDepthHelp" placeholder="Inches" min="1" max="144" maxlength="3">
 				<small id="soffitDepthHelp" class="form-text text-muted">Enter how many inches you're estimating for the depth of the soffit.</small>
 			</div>
 		</div>
@@ -81,6 +81,10 @@ function updateSoffit()
 			soffitDepth.val() > 0 )
 	{
 
+		soffitPieces = 0;
+		soffitSheets = 0;
+		soffitPiecesPerSheet = 0;
+
 		soffitPieces = Math.round( linearFeet.val() * 12 / 16 * 100 ) / 100;
 
 		soffitPiecesPerSheet = Math.round( 144 / soffitDepth.val() * 100 ) / 100;
@@ -105,10 +109,11 @@ function soffitSetResults( pieces, piecesPerSheet, soffitSheets )
 	$('#soffitPiecesResult').text(	Math.floor( pieces ) +
 									' (' + pieces + ')' );
 
-	$('#soffitSheetsResult').text(	Math.ceil( piecesPerSheet ) +
-									' (' + piecesPerSheet + ')' );
-	$('#soffitPiecesPerSheetResult').text(	Math.floor( soffitSheets ) +
-											' (' + soffitSheets + ')' );
+	$('#soffitSheetsResult').text(	Math.ceil( soffitSheets ) +
+									' (' + soffitSheets + ')' );
+
+	$('#soffitPiecesPerSheetResult').text(	Math.floor( piecesPerSheet ) +
+											' (' + piecesPerSheet + ')' );
 }
 
 </script>
