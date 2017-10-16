@@ -1,20 +1,21 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Create Job')
+@section('page-title', 'Edit Job')
 
 @section('page-breadcrumbs')
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.index') }}">Jobs</a></li>
-		<li class="breadcrumb-item active">New Job</li>
+		<li class="breadcrumb-item active">Edit Job</li>
 	</ol>
 @endsection
 
 @section('page-content')
-	<form 	action="{{ route('jobs.store') }}"
+	<form 	action="{{ route('jobs.update', $job->id) }}"
 			method="POST"
 			enctype="multipart/form-data">
 		{{ csrf_field() }}
+		{{ method_field( 'PATCH' ) }}
 		<div class="form-group">
 			<label 	for="jobName" 
 					{{ $errors->has('name') ? 'text-danger' :'' }}>
@@ -24,7 +25,7 @@
 					name="name" 
 					class="form-control {{ $errors->has('name') ? 'is-invalid' :'' }}"
 					id="jobName"
-					value="{{ old('name') }}"
+					value="{{ old('name', $job->name) }}"
 					autocomplete="off">
 			<small class="form-text {{ $errors->has('name') ? 'invalid-feedback' :'' }}">
 				Optional. Between 2 to 50 characters.
@@ -40,7 +41,7 @@
 					name="email"
 					class="form-control {{ $errors->has('email') ? 'is-invalid' :'' }}"
 					id="jobEmail"
-					value="{{ old('email') }}"
+					value="{{ old('email', $job->email) }}"
 					autocomplete="off">
 			<small class="form-text {{ $errors->has('email') ? 'invalid-feedback' :'' }}">
 				Optional.
@@ -57,7 +58,7 @@
 					class="form-control {{ $errors->has('address') ? 'is-invalid' :'' }}"
 					id="jobAddress"
 					autocomplete="off"
-					required>{{ old('address') }}</textarea>
+					required>{{ old('address', $job->address) }}</textarea>
 			<small class="form-text {{ $errors->has('address') ? 'invalid-feedback' :'' }}">
 				Required.
 			</small>
@@ -72,7 +73,7 @@
 					name="phone"
 					class="form-control {{ $errors->has('phone') ? 'is-invalid' :'' }}"
 					id="jobPhone"
-					value="{{ old('phone') }}"
+					value="{{ old('phone', $job->formatPhoneNumber( $job->phone )) }}"
 					autocomplete="off">
 			<small class="form-text {{ $errors->has('phone') ? 'invalid-feedback' :'' }}">
 				Optional. Between 10-15 characters.
@@ -88,7 +89,7 @@
 					name="extension"
 					class="form-control {{ $errors->has('extension') ? 'is-invalid' :'' }}"
 					id="jobExtension"
-					value="{{ old('extension') }}"
+					value="{{ old('extension', $job->extension) }}"
 					autocomplete="off">
 			<small class="form-text {{ $errors->has('extension') ? 'invalid-feedback' :'' }}">
 				Optional.
@@ -104,13 +105,13 @@
 					name="note"
 					class="form-control {{ $errors->has('note') ? 'is-invalid' :'' }}"
 					id="jobNote"
-					autocomplete="off">{{ old('note') }}</textarea>
+					autocomplete="off">{{ old('note', $job->note) }}</textarea>
 			<small class="form-text {{ $errors->has('note') ? 'invalid-feedback' :'' }}">
 				Optional. From zero, then 2 characters to more.
 			</small>
 		</div>
 
-		<button class="btn btn-primary" type="submit">Save New</button>
+		<button class="btn btn-primary" type="submit">Update</button>
 		<a class="btn btn-outline-primary" href="{{ route('jobs.index') }}">
 			Cancel
 		</a>

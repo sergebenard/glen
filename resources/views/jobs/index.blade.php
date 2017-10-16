@@ -2,6 +2,13 @@
 
 @section('page-title', 'Jobs')
 
+@section('page-breadcrumbs')
+	<ol class="breadcrumb my-2">
+		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
+		<li class="breadcrumb-item active">Jobs</li>
+	</ol>
+@endsection
+
 @section('page-content')
 	<a class="btn btn-primary btn-block" href="{{ route('jobs.create') }}">
 		New Job
@@ -17,7 +24,9 @@
 	<div class="card my-3">
 		<div class="card-header">
 			<div class="h4 mb-1">
-				{{ $job->number }}
+				<a href="{{ route('jobs.show', $job->id) }}">
+					{{ $job->number }}
+				</a>
 			</div>
 			<small class="text-muted">{{ $job->created_at->diffForHumans() }}</small>
 		</div>
@@ -38,7 +47,7 @@
 			@if( !empty( $job->phone ) )
 			<li class="list-group-item">
 				<a href="tel:{{ $job->phone }}">
-					{{ $job->phone }}
+					{{ $job->formatPhoneNumber( $job->phone ) }}
 				</a>
 				@if( !empty( $job->extension ) )
 				<small class="text-muted">

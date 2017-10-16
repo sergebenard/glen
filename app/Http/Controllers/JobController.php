@@ -86,6 +86,7 @@ class JobController extends Controller
 	public function edit(Job $job)
 	{
 		//
+		return view('jobs.edit', compact('job'));
 	}
 
 	/**
@@ -98,6 +99,19 @@ class JobController extends Controller
 	public function update(Request $request, Job $job)
 	{
 		//
+		$request->validate([
+			'name' => 'nullable|min:2|max:50',
+			'email' => 'nullable|email',
+			'address' => 'required|min:2',
+			'phone' => 'nullable|min:10|max:15',
+			'note' =>	'nullable|min:2',
+		]);
+
+		$job->save( $request->all() );
+
+		$request->session()->flash('success', "Successfully updated Job.");
+
+		return redirect( route( 'jobs.show', $job->id ) );
 	}
 
 	/**
