@@ -42,7 +42,11 @@
 			<li class="list-group-item">{{ $job->name }}</li>
 			@endif
 			@if( !empty( $job->address ) )
-			<li class="list-group-item">{{ $job->address }}</li>
+			<li class="list-group-item">
+				<a href="https://www.google.ca/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+					{{ $job->address }}
+				</a>
+			</li>
 			@endif
 			@if( !empty( $job->phone ) )
 			<li class="list-group-item">
