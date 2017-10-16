@@ -17,4 +17,20 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/tools', 'PageController@tools')->name('tools');
+
+Route::resource('/jobs', 'JobController');
+
 Route::get('/home', 'HomeController@index')->name('home');
+
+/*
+ACTIONS HANDLED BY RESOURCE CONTROLLER
+VERB		URI						ACTION		ROUTE NAME
+GET			/photos					index		photos.index
+GET			/photos/create			create		photos.create
+POST		/photos					store		photos.store
+GET			/photos/{photo}			show		photos.show
+GET			/photos/{photo}/edit	edit		photos.edit
+PUT/PATCH	/photos/{photo}			update		photos.update
+DELETE		/photos/{photo}			destroy		photos.destroy
+*/
