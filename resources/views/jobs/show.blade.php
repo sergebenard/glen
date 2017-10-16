@@ -68,7 +68,8 @@
 						<i class="fa fa-pencil" aria-hidden="true"></i>
 						Edit
 					</a>
-					<button 	data-toggle="modal"
+					<button 	type="button" 
+								data-toggle="modal"
 								data-target="#confirmModal"
 								data-record="{{ $job->id }}"
 								data-number="{{ $job->number }}"
@@ -76,7 +77,7 @@
 						<i class="fa fa-trash" aria-hidden="true"></i>
 						Delete
 					</button>
-					<form 	id="job-{{ $job->id }}"
+					<form 	id="deleteJob"
 							action="{{ route('jobs.destroy', $job->id) }}"
 							method="POST"
 							enctype="multipart/form-data">
@@ -317,5 +318,40 @@
 			</div>
 		</div>
 	</div>
-
+	<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" id="confirmModal">
+		<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Deleting Job {{ $job->number }}</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete this job?</p>
+			</div>
+			<div class="modal-footer">
+				<button 	type="button" 
+							id="btnModalConfirm" 
+							class="btn btn-primary">
+					Yes
+				</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+	</div>
 @stop
+
+@section( 'page-script' )
+<script>
+	$('#confirmModal').on('show.bs.modal', function (event) {
+				
+		$('#btnModalConfirm').click( function() {
+
+			$('#deleteJob').submit();
+		});
+
+	})
+</script>
+@endsection
