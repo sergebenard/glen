@@ -28,6 +28,11 @@ class Job extends Model
 		'finished'
 	];
 
+	public function materials()
+	{
+		return $this->morphMany('App\Materials', 'materialable');
+	}
+
 	//
 	public function scopeUnfinished( $query )
 	{

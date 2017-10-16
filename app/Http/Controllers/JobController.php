@@ -107,7 +107,14 @@ class JobController extends Controller
 			'note' =>	'nullable|min:2',
 		]);
 
-		$job->save( $request->all() );
+		$job->name = $request->name;
+		$job->email = $request->email;
+		$job->address = $request->address;
+		$job->phone = $request->phone;
+		$job->extension = $request->extension;
+		$job->note = $request->note;
+
+		$job->save();
 
 		$request->session()->flash('success', "Successfully updated Job.");
 

@@ -14,6 +14,10 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div class="card my-3">
+				<a href="https://www.google.ca/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+				<img 	class="card-img-top"
+						src="https://maps.googleapis.com/maps/api/staticmap?size=512x512&scale=2&maptype=roadmap\&markers=size:mid%7Ccolor:red%7C{{ urlencode( $job->address ) }}&key=AIzaSyC3uTBSLuDdTdq_XSYPXhNR5Y1EwiPClFw" alt="Address">
+				</a>
 				<div class="card-header">
 					<div class="h4 mb-1">
 						{{ $job->number }}
@@ -32,7 +36,11 @@
 					<li class="list-group-item">{{ $job->name }}</li>
 					@endif
 					@if( !empty( $job->address ) )
-					<li class="list-group-item">{{ $job->address }}</li>
+					<li class="list-group-item">
+						<a href="https://www.google.ca/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+							{{ $job->address }}
+						</a>
+					</li>
 					@endif
 					@if( !empty( $job->phone ) )
 					<li class="list-group-item">
@@ -84,15 +92,41 @@
 					<div class="card my-3">
 						<div class="card-header">
 							<div class="h5 mb-1">
-								Labour
+								Proposals
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<a 	class="btn btn-outline-primary btn-sm float-right"
-									href="#">
-									Edit
-								</a >
+							<li class="list-group-item list-group-item-warning">
+								<div class="list-group-item-heading">
+									Proposal 1
+									<a 	class="btn btn-outline-primary btn-sm float-right mx-auto"
+										href="#">
+										Edit
+									</a>
+								</div>
+								<small class="text-muted">
+									$370 Labor, $422 Material = $792
+								</small>
+								-
+								<small class="text-danger">
+									Refused
+								</small>
+							</li>
+							<li class="list-group-item list-group-item-success">
+								<div class="list-group-item-heading">
+									Proposal 2
+									<a 	class="btn btn-outline-primary btn-sm float-right"
+										href="#">
+										Edit
+									</a>
+								</div>
+								<small class="text-muted">
+									$380 Labor, $422 Material = $802
+								</small>
+								-
+								<small class="text-success">
+									Approved
+								</small>
 							</li>
 						</ul>
 						<div class="card-footer">
@@ -109,15 +143,25 @@
 					<div class="card my-3">
 						<div class="card-header">
 							<div class="h5 mb-1">
-								Material
+								Invoices
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<a 	class="btn btn-outline-primary btn-sm float-right"
-									href="#">
-									Edit
-								</a >
+							<li class="list-group-item list-group-item-warning">
+								<div class="list-group-item-heading">
+									Invoice 1
+									<a 	class="btn btn-outline-primary btn-sm float-right"
+										href="#">
+										Edit
+									</a>
+								</div>
+								<small class="text-muted">
+									$380 Labor, $422 Material = $802
+								</small>
+								-
+								<small class="text-danger">
+									Unsent
+								</small>
 							</li>
 						</ul>
 						<div class="card-footer">
