@@ -18,8 +18,8 @@ class CreateJobsTable extends Migration
             $table->string('number')->unique();
             $table->string('name')->nullable();
             $table->string('address');
-            $table->integer('phone', 15)->nullable()->unsigned();
             $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('extension')->nullable();
             $table->text('note')->nullable();
             $table->boolean('finished')->default(0);
@@ -34,6 +34,6 @@ class CreateJobsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jobs');
+        //
     }
 }
