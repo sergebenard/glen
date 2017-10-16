@@ -174,6 +174,147 @@
 				</div>
 
 			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<div class="card my-3">
+						<div class="card-header">
+							<div class="h5 mb-1">
+								Actual
+							</div>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item list-group-item-info">
+								<div class="list-group-item-heading">
+									Material
+								</div>
+							</li>
+							<li class="list-group-item p-0">
+								<table class="table table-sm mb-0">
+									<tbody>
+										<tr>
+											<td class="small text-right" scope="row">
+												1
+											</td>
+											<td class="small">
+												Roll
+											</td>
+											<td class="small">
+												Flatstock-White
+											</td>
+											<td class="small text-right">
+												@&nbsp;$125.22
+											</td>
+											<th class="small text-right">
+												=&nbsp;$125.22
+											</th>
+										</tr>
+										<tr>
+											<td class="small text-right" scope="row">
+												3
+											</td>
+											<td class="small">
+												Boxes
+											</td>
+											<td class="small">
+												Wood Screws
+											</td>
+											<td class="small text-right">
+												@ $17.53
+											</td>
+											<th class="small text-right">
+												= $52.59
+											</th>
+										</tr>
+										<tr>
+											<td class="small text-right" scope="row">
+												2
+											</td>
+											<td class="small">
+												Boxes
+											</td>
+											<td class="small">
+												Siding-Mocha
+											</td>
+											<td class="small text-right">
+												@ $97.73
+											</td>
+											<th class="small text-right">
+												= $194.00
+											</th>
+										</tr>
+										<tr class="table-dark">
+											<th class="small text-right" colspan="4">
+												Total
+											</th>
+											<th class="small text-right">
+												$371.81
+											</th>
+										</tr>
+									</tbody>
+								</table>
+								<a 	class="btn btn-outline-info btn-block btn-sm mb-3" 
+									href="#">
+									New
+								</a>
+								<hr>
+							</li>
+							<li class="list-group-item list-group-item-info">
+								<div class="list-group-item-heading">
+									Labour
+								</div>
+							</li>
+							<li class="list-group-item p-0">
+								<table class="table table-sm mb-0">
+									<tbody>
+										<tr>
+											<td class="small text-right" scope="row">
+												3&nbsp;hrs
+											</td>
+											<td class="small">
+												Clearing Debris
+											</td>
+											<td class="small">
+												@&nbsp;$15/hr
+											</td>
+											<th class="small text-right">
+												=&nbsp;$45
+											</th>
+										</tr>
+										<tr>
+											<td class="small text-right" scope="row">
+												0.5&nbsp;hrs
+											</td>
+											<td class="small">
+												Flashing Repair
+											</td>
+											<td class="small">
+												@&nbsp;$40/hr
+											</td>
+											<th class="small text-right">
+												=&nbsp;$20
+											</th>
+										</tr>
+										<tr class="table-dark">
+											<th class="small text-right" colspan="3">
+												Total
+											</th>
+											<th class="small text-right">
+												$65
+											</th>
+										</tr>
+									</tbody>
+								</table>
+								<a 	class="btn btn-outline-info btn-block btn-sm" 
+									href="#">
+									New
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</div>
 
