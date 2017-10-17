@@ -60,7 +60,7 @@ class JobMaterialsController extends Controller
 
         $material->save();
 
-        $request->session()->flash('success', "Successfully created new material consumed on Job" . $job->number . "." );
+        $request->session()->flash('success', "Successfully created new material consumed on Job " . $job->number . "." );
 
         return redirect( route('jobs.show', $job->id) );
     }
@@ -112,7 +112,7 @@ class JobMaterialsController extends Controller
 
         $material->save();
 
-        $request->session()->flash('success', "Successfully updated material consumed on Job" . $job->number . "." );
+        $request->session()->flash('success', "Successfully updated material consumed on Job " . $job->number . "." );
 
         return redirect( route('jobs.show', $job->id) );
     }
@@ -123,8 +123,13 @@ class JobMaterialsController extends Controller
      * @param  \App\Materials  $materials
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Materials $materials)
+    public function destroy(Job $job, Materials $material, Request $request)
     {
         //
+        $material->delete();
+
+        $request->session()->flash('success', "Successfully deleted material consumed on Job " . $job->number . ".");
+
+        return redirect( route('jobs.show', $job->id) );
     }
 }

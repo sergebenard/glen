@@ -20,12 +20,12 @@
             @include('partials.nav-admin')
         </div>
         <div class="container">
-            @include('partials.messages')
             @yield('page-breadcrumbs')
         </div>
 
         <div class="container">
             <h1 class="display-3">@yield('page-title')</h1>
+            @include('partials.messages')
             @yield('page-content')
         </div><!-- /.container -->
 

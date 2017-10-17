@@ -193,6 +193,7 @@
 							<li class="list-group-item p-0">
 								<table class="table table-sm mb-0">
 									<tbody>
+									@if( count( $job->materials ) >= 1 )
 										@php
 										$total = 0;
 										@endphp
@@ -203,6 +204,8 @@
 														id="formDeleteMaterial-{{ $material->id }}"
 														action="{{ route('jobs.materials.destroy', [ $job->id, $material->id ]) }}"
 														enctype="multipart/data">
+													{{ csrf_field() }}
+													{{ method_field('DELETE') }}
 													<button class="btn btn-outline-danger p-0 px-1">
 														<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
 													</button>
@@ -242,6 +245,13 @@
 												@endif
 											</th>
 										</tr>
+									@else
+										<tr>
+											<td class="text-center">
+												No materials.
+											</td>
+										</tr>
+									@endif
 									</tbody>
 								</table>
 								<a 	class="btn btn-outline-info btn-block btn-sm mb-3" 
