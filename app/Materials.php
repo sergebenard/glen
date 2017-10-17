@@ -20,4 +20,14 @@ class Materials extends Model
 	{
 		return $this->morphTo();
 	}
+
+	public Function setNameAttribute( $value )
+	{
+		$this->attributes['name'] = ucwords( $value );
+	}
+
+	public Function setDescriptionAttribute( $value )
+	{
+		$this->attributes['description'] = ucwords( $value );
+	}
 }

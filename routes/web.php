@@ -19,6 +19,19 @@ Auth::routes();
 
 Route::get('/tools', 'PageController@tools')->name('tools');
 
+Route::resource(	'jobs/{job}/materials',
+					'JobMaterialsController',
+					['names' => [
+    						'index' => 'jobs.materials.index',
+    						'create' => 'jobs.materials.create',
+    						'store' => 'jobs.materials.store',
+    						'show' => 'jobs.materials.show',
+    						'edit' => 'jobs.materials.edit',
+    						'update' => 'jobs.materials.update',
+    						'destroy' => 'jobs.materials.destroy',
+						]
+					]);
+
 Route::resource('/jobs', 'JobController');
 
 Route::get('/home', 'HomeController@index')->name('home');
