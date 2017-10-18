@@ -33,6 +33,11 @@ class Job extends Model
 		return $this->morphMany('App\Materials', 'materialable');
 	}
 
+	public function labour()
+	{
+		return $this->morphMany('App\Labour', 'labourable');
+	}
+
 	//
 	public function scopeUnfinished( $query )
 	{

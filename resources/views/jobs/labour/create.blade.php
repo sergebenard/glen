@@ -1,30 +1,30 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Add Material')
+@section('page-title', 'Add Labour')
 
 @section('page-breadcrumbs')
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.index') }}">Jobs</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $job->id) }}">{{ $job->number }}</a></li>
-		<li class="breadcrumb-item active">New Material</li>
+		<li class="breadcrumb-item active">New Labour</li>
 	</ol>
 @endsection
 
 @section('page-content')
-	<form 	action="{{ route('jobs.materials.store', $job->id) }}"
+	<form 	action="{{ route('jobs.labour.store', $job->id) }}"
 			method="POST"
 			enctype="multipart/form-data">
 		{{ csrf_field() }}
 		<div class="form-group">
-			<label 	for="materialAmount" 
+			<label 	for="labourCount" 
 					{{ $errors->has('count') ? 'text-danger' :'' }}>
-				Item Count
+				Hour Count
 			</label>
 			<input 	type="number"
 					name="count"
 					class="form-control {{ $errors->has('count') ? 'is-invalid' :'' }}"
-					id="materialAmount"
+					id="labourCount"
 					value="{{ old('count', '1') }}"
 					step="any"
 					autocomplete="off"
@@ -35,57 +35,39 @@
 			</small>
 		</div>
 		<div class="form-group">
-			<label 	for="materialName" 
-					{{ $errors->has('name') ? 'text-danger' :'' }}>
-				Item Name
-			</label>
-			<input 	type="text"
-					name="name"
-					class="form-control {{ $errors->has('name') ? 'is-invalid' :'' }}"
-					id="materialName"
-					value="{{ old('name') }}"
-					autocomplete="off"
-					placeholder="Ex: Roll Flatstock or Box Screws" 
-					required>
-			<small class="form-text {{ $errors->has('name') ? 'invalid-feedback' :'' }}">
-				Required.
-			</small>
-		</div>
-		<div class="form-group">
-			<label 	for="materialDescription" 
+			<label 	for="labourName" 
 					{{ $errors->has('description') ? 'text-danger' :'' }}>
-				Item Description
+				Labour Description
 			</label>
 			<input 	type="text"
 					name="description"
 					class="form-control {{ $errors->has('description') ? 'is-invalid' :'' }}"
-					id="materialDescription"
+					id="labourName"
 					value="{{ old('description') }}"
 					autocomplete="off"
-					placeholder="Ex: White or Brown or Construction">
+					placeholder="Ex: Siding Installation" 
+					required>
 			<small class="form-text {{ $errors->has('description') ? 'invalid-feedback' :'' }}">
-				Optional.
+				Required.
 			</small>
 		</div>
 		<div class="form-group">
-			<label 	for="materialName" 
-					{{ $errors->has('cost') ? 'text-danger' :'' }}>
-				Item Cost
+			<label 	for="labourWage" 
+					{{ $errors->has('wage') ? 'text-danger' :'' }}>
+				Wage/Hour
 			</label>
 			<div class="input-group">
-				<div class="input-group-addon {{ $errors->has('cost') ? 'bg-danger text-white' :'' }}">$</div>
+				<div class="input-group-addon {{ $errors->has('wage') ? 'bg-danger text-white' :'' }}">$</div>
 				<input 	type="number"
-						name="cost"
-						class="form-control {{ $errors->has('cost') ? 'is-invalid' :'' }}"
-						id="materialName"
-						value="{{ old('cost') }}"
+						name="wage"
+						class="form-control {{ $errors->has('wage') ? 'is-invalid' :'' }}"
+						id="labourWage"
+						value="{{ old('wage') }}"
 						autocomplete="off"
 						step="any"
 						placeholder="Ex: 15.00">
 			</div><!-- /input-group -->
-			<div class="clearfix">
-			</div>
-			<small class="form-text {{ $errors->has('cost') ? 'invalid-feedback' :'' }}">
+			<small class="form-text {{ $errors->has('wage') ? 'invalid-feedback' :'' }}">
 				Optional.
 			</small>
 		</div>

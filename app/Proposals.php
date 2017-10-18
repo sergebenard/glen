@@ -11,4 +11,9 @@ class Proposals extends Model
     {
     	return $this->morphMany('App\Materials', 'materialable');
     }
+
+    public function labour()
+    {
+    	return $this->morphMany('App\Labour', 'labourable');
+    }
 }

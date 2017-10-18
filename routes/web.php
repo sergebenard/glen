@@ -32,6 +32,19 @@ Route::resource(	'jobs/{job}/materials',
 						]
 					]);
 
+Route::resource(	'jobs/{job}/labour',
+					'JobLabourController',
+					['names' => [
+    						'index' => 'jobs.labour.index',
+    						'create' => 'jobs.labour.create',
+    						'store' => 'jobs.labour.store',
+    						'show' => 'jobs.labour.show',
+    						'edit' => 'jobs.labour.edit',
+    						'update' => 'jobs.labour.update',
+    						'destroy' => 'jobs.labour.destroy',
+						]
+					]);
+
 Route::resource('/jobs', 'JobController');
 
 Route::get('/home', 'HomeController@index')->name('home');

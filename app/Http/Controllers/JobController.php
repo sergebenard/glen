@@ -16,7 +16,7 @@ class JobController extends Controller
 	public function index()
 	{
 		//
-		$jobs = Job::orderBy('created_at', 'DESC')->get();
+		$jobs = Job::orderBy('created_at', 'DESC')->with('materials', 'labour')->get();
 
 		return view('jobs.index', compact('jobs'));
 	}
@@ -74,6 +74,8 @@ class JobController extends Controller
 	public function show(Job $job)
 	{
 		//
+		$job->with('materials', 'labour');
+		
 		return view('jobs.show', compact('job'));
 	}
 
