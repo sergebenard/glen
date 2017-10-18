@@ -274,7 +274,7 @@
 										<tr>
 											<td class="small text-right" scope="row">
 												<form 	method="POST"
-														id="formDeleteMaterial-{{ $labour->id }}"
+														id="formDeleteLabour-{{ $labour->id }}"
 														action="{{ route('jobs.labour.destroy', [ $job->id, $labour->id ]) }}"
 														enctype="multipart/data">
 													{{ csrf_field() }}

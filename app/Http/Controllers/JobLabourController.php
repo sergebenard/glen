@@ -99,7 +99,7 @@ class JobLabourController extends Controller
 			'description' => 'required|min:2|max:100',
 			'wage' => 'nullable|numeric|between:0.01,10000',
 		]);
-		
+
 		$labour->count = $request->count;
 		$labour->description = $request->description;
 		$labour->wage = $request->wage;
@@ -117,8 +117,13 @@ class JobLabourController extends Controller
 	 * @param  \App\Labour  $labour
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy( Job $job, Labour $labour )
+	public function destroy( Job $job, Labour $labour, Request $request )
 	{
 		//
+		$labour->delete();
+
+		$request->session()->flash('success', "Successfully deleted labour entry for Job " . $job->number . "." );
+
+		return redirect( route('jobs.show', $job->id) );
 	}
 }
