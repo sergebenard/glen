@@ -16,6 +16,11 @@
 						Jobs
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url('/calculator') }}">
+						Calculator
+						</a>
+					</li>
 
 				</ul>
 				@endauth

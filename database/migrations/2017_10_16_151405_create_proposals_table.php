@@ -16,9 +16,8 @@ class CreateProposalsTable extends Migration
         Schema::create('proposals', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('job_id')->unsigned();
-            $table->integer('revision')->unsigned()->default(1);
             $table->boolean('sent')->default(0);
-            $table->boolean('approved')->default(0);
+            $table->enum('status', ['approved', 'refused', 'undecided'])->default(0);
             $table->timestamps();
         });
     }

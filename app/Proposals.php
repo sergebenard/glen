@@ -16,4 +16,8 @@ class Proposals extends Model
     {
     	return $this->morphMany('App\Labour', 'labourable');
     }
+    public function job()
+    {
+    	return $this->belongsTo( Job::class );
+    }
 }

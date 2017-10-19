@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Job;
 use App\Invoices;
 use Illuminate\Http\Request;
 
-class InvoicesController extends Controller
+class JobInvoicesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Job $job )
     {
         //
+        $job->with('invoices')->get();
+
+        return view('jobs.invoices.index', compact('job'));
     }
 
     /**
@@ -22,9 +26,19 @@ class InvoicesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create( Job $job, Request $request )
     {
         //
+        $invoice = new Invoices;
+
+        $invoice->create( [
+                'job_id' => $job->id,
+            ]
+        );
+
+        $request->session()->flash('success', 'Successfully created new empty Invoice.');
+
+        return redirect( route('jobs.invoices.show', [ $job, $invoice->id ]) );
     }
 
     /**
@@ -44,7 +58,7 @@ class InvoicesController extends Controller
      * @param  \App\Invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function show(Invoices $invoices)
+    public function show(Job $job, Invoices $invoices)
     {
         //
     }

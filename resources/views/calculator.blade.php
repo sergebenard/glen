@@ -1,13 +1,12 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Glen\'s Tools')
+@section('page-title', 'Soffit Calculator')
 
 @section('page-content')
 
 <div class="card-deck">
 	<div class="card">
 		<div class="card-block">
-			<h4 class="card-title">Soffit Calculator</h4>
 			<p class="card-text">Calculate the Soffit Details.</p>
 			
 			<div class="form-group">
@@ -42,11 +41,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="card">
-		
-	</div>
 </div>
-
 @endsection
 
 

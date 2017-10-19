@@ -38,6 +38,16 @@ class Job extends Model
 		return $this->morphMany('App\Labour', 'labourable');
 	}
 
+	public function invoices()
+	{
+		return $this->hasMany( Invoices::class );
+	}
+
+	public function proposals()
+	{
+		return $this->hasMany( Proposals::class );
+	}
+
 	//
 	public function scopeUnfinished( $query )
 	{

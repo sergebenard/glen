@@ -17,8 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/tools', 'PageController@tools')->name('tools');
-
 Route::resource(	'jobs/{job}/materials',
 					'JobMaterialsController',
 					['names' => [
@@ -45,7 +43,48 @@ Route::resource(	'jobs/{job}/labour',
 						]
 					]);
 
+Route::resource(	'jobs/{job}/invoices',
+					'JobInvoicesController',
+					['names' => [
+    						'index' => 'jobs.invoices.index',
+    						'create' => 'jobs.invoices.create',
+    						'store' => 'jobs.invoices.store',
+    						'show' => 'jobs.invoices.show',
+    						'edit' => 'jobs.invoices.edit',
+    						'update' => 'jobs.invoices.update',
+    						'destroy' => 'jobs.invoices.destroy',
+						]
+					]);
+
+Route::resource(	'jobs/{job}/invoices/{invoice}/materials',
+					'JobInvoicesMaterialsController',
+					['names' => [
+    						'index' => 'jobs.invoices.materials.index',
+    						'create' => 'jobs.invoices.materials.create',
+    						'store' => 'jobs.invoices.materials.store',
+    						'show' => 'jobs.invoices.materials.show',
+    						'edit' => 'jobs.invoices.materials.edit',
+    						'update' => 'jobs.invoices.materials.update',
+    						'destroy' => 'jobs.invoices.materials.destroy',
+						]
+					]);
+
+Route::resource(	'jobs/{job}/invoices/{invoice}/labour',
+					'JobInvoicesLabourController',
+					['names' => [
+    						'index' => 'jobs.invoices.labour.index',
+    						'create' => 'jobs.invoices.labour.create',
+    						'store' => 'jobs.invoices.labour.store',
+    						'show' => 'jobs.invoices.labour.show',
+    						'edit' => 'jobs.invoices.labour.edit',
+    						'update' => 'jobs.invoices.labour.update',
+    						'destroy' => 'jobs.invoices.labour.destroy',
+						]
+					]);
+
 Route::resource('/jobs', 'JobController');
+
+Route::view('/calculator', 'calculator')->name('calculator');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
