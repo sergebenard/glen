@@ -14,7 +14,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div class="card my-3">
-				<a href="https://www.google.com/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+				<a href="https://www.google.ca/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
 				<img 	class="card-img-top"
 						src="https://maps.googleapis.com/maps/api/staticmap?size=512x512&scale=2&maptype=roadmap\&markers=size:mid%7Ccolor:red%7C{{ urlencode( $job->address ) }}&key=AIzaSyC3uTBSLuDdTdq_XSYPXhNR5Y1EwiPClFw" alt="Address">
 				</a>
@@ -37,7 +37,7 @@
 					@endif
 					@if( !empty( $job->address ) )
 					<li class="list-group-item">
-						<a href="https://www.google.com/maps/search/?api=1&query={{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+						<a href="https://www.google.ca/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
 							{{ $job->address }}
 						</a>
 					</li>
@@ -148,14 +148,11 @@
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
-						@foreach( $job->invoices as $invoice )
-							<li class="list-group-item {{ ( $invoice->sent ) ? 'list-group-item-success' : 'list-group-item-warning' }}">
+							<li class="list-group-item list-group-item-warning">
 								<div class="list-group-item-heading">
-									<a href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}" >
-										Invoice {{ $loop->iteration }}
-									</a>
+									Invoice 1
 									<a 	class="btn btn-outline-primary btn-sm float-right"
-										href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
+										href="#">
 										Edit
 									</a>
 								</div>
@@ -163,21 +160,14 @@
 									$380 Labor, $422 Material = $802
 								</small>
 								-
-								@if ( $invoice->sent )
-								<small class="text-success">
-									Sent
-								</small>
-								@else
 								<small class="text-danger">
 									Unsent
 								</small>
-								@endif
 							</li>
-						@endforeach
 						</ul>
 						<div class="card-footer">
 							<a 	class="btn btn-outline-primary btn-block" 
-								href="{{ route('jobs.invoices.create', $job->id) }}">
+								href="#">
 								New
 							</a>
 						</div>
@@ -203,69 +193,69 @@
 							<li class="list-group-item p-0">
 								<table class="table table-sm mb-0">
 									<tbody>
-									@if( count( $job->materials ) >= 1 )
-										@php
-										$total = 0;
-										@endphp
-										@foreach( $job->materials as $material )
 										<tr>
 											<td class="small text-right" scope="row">
-												<form 	method="POST"
-														id="formDeleteMaterial-{{ $material->id }}"
-														action="{{ route('jobs.materials.destroy', [ $job->id, $material->id ]) }}"
-														enctype="multipart/data">
-													{{ csrf_field() }}
-													{{ method_field('DELETE') }}
-													<button class="btn btn-outline-danger p-0 px-1">
-														<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
-													</button>
-												</form>
-											</td>
-											<td class="small text-right">
-												{{ $material->count }}
+												1
 											</td>
 											<td class="small">
-												<a 	href="{{ route('jobs.materials.edit', [$job->id, $material->id]) }}">
-													{{ $material->name }}
-												</a>
+												Roll
 											</td>
 											<td class="small">
-												{{ $material->description }}
+												Flatstock-White
 											</td>
 											<td class="small text-right">
-												@if( !empty( $material->cost ) )
-												@&nbsp;${{ round( $material->cost, 2 ) }}
-												@endif
+												@&nbsp;$125.22
 											</td>
-											<th class="small text-right table-active">
-												@if( !empty( $material->cost ) )
-												${{ $sub = round( $material->cost * $material->count, 2 ) }}
-												@php( $total += $sub )
-												@endif
+											<th class="small text-right">
+												=&nbsp;$125.22
 											</th>
 										</tr>
-										@endforeach
+										<tr>
+											<td class="small text-right" scope="row">
+												3
+											</td>
+											<td class="small">
+												Boxes
+											</td>
+											<td class="small">
+												Wood Screws
+											</td>
+											<td class="small text-right">
+												@ $17.53
+											</td>
+											<th class="small text-right">
+												= $52.59
+											</th>
+										</tr>
+										<tr>
+											<td class="small text-right" scope="row">
+												2
+											</td>
+											<td class="small">
+												Boxes
+											</td>
+											<td class="small">
+												Siding-Mocha
+											</td>
+											<td class="small text-right">
+												@ $97.73
+											</td>
+											<th class="small text-right">
+												= $194.00
+											</th>
+										</tr>
 										<tr class="table-dark">
-											<th class="small text-right" colspan="5">
+											<th class="small text-right" colspan="4">
 												Total
 											</th>
 											<th class="small text-right">
-												@if( $total > 0 )
-												${{ round( $total, 2 ) }}
-												@endif
+												$371.81
 											</th>
 										</tr>
-									@else
-										<tr>
-											<td class="text-center">
-												No materials.
-											</td>
-										</tr>
-									@endif
 									</tbody>
 								</table>
 								<a 	class="btn btn-outline-info btn-block btn-sm mb-3" 
-									href="{{ route('jobs.materials.create', $job->id ) }}">
+									href="{{ route('materials.create', [ 'job', $job->id ] ) }}">
 									New
 								</a>
 								<hr>
@@ -278,70 +268,53 @@
 							<li class="list-group-item p-0">
 								<table class="table table-sm mb-0">
 									<tbody>
-									@if( count( $job->labour ) >= 1 )
-										@php( $total = 0 )
-										@foreach( $job->labour as $labour )
 										<tr>
 											<td class="small text-right" scope="row">
-												<form 	method="POST"
-														id="formDeleteLabour-{{ $labour->id }}"
-														action="{{ route('jobs.labour.destroy', [ $job->id, $labour->id ]) }}"
-														enctype="multipart/data">
-													{{ csrf_field() }}
-													{{ method_field('DELETE') }}
-													<button class="btn btn-outline-danger p-0 px-1">
-														<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
-													</button>
-												</form>
-											</td>
-											<td class="small text-right">
-												{{ $labour->count }}
+												3&nbsp;hrs
 											</td>
 											<td class="small">
-												<a href="{{ route('jobs.labour.edit', [$job->id, $labour->id]) }}">
-													{{ $labour->description }}
-												</a>
+												Clearing Debris
 											</td>
-											<td class="small text-right">
-											@if( !empty($labour->wage) )
-												${{ round( $labour->wage, 2 ) }}
-											@endif
+											<td class="small">
+												@&nbsp;$15/hr
 											</td>
-											<th class="small text-right table-active">
-											@if( !empty($labour->wage) )
-												${{ $sub = round( $labour->count * $labour->wage, 2 ) }}
-												@php( $total += $sub )
-											@endif
+											<th class="small text-right">
+												=&nbsp;$45
 											</th>
 										</tr>
-										@endforeach
+										<tr>
+											<td class="small text-right" scope="row">
+												0.5&nbsp;hrs
+											</td>
+											<td class="small">
+												Flashing Repair
+											</td>
+											<td class="small">
+												@&nbsp;$40/hr
+											</td>
+											<th class="small text-right">
+												=&nbsp;$20
+											</th>
+										</tr>
 										<tr class="table-dark">
-											<th class="small text-right" colspan="4">
+											<th class="small text-right" colspan="3">
 												Total
 											</th>
 											<th class="small text-right">
-												@if( $total > 0 )
-												${{ round( $total, 2 ) }}
-												@endif
+												$65
 											</th>
 										</tr>
-									@else
-										<tr>
-											<td class="text-center">
-												No labour.
-											</td>
-										</tr>
-									@endif
 									</tbody>
 								</table>
 								<a 	class="btn btn-outline-info btn-block btn-sm" 
-									href="{{ route('jobs.labour.create', $job->id) }}">
+									href="#">
 									New
 								</a>
 							</li>
 						</ul>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -358,20 +331,27 @@
 				<p>Are you sure you want to delete this job?</p>
 			</div>
 			<div class="modal-footer">
-				<form 	method="POST"
-						id="formDeletelabour-{{ $job->id }}"
-						action="{{ route('jobs.destroy', $job->id) }}"
-						enctype="multipart/data">
-					{{ csrf_field() }}
-					{{ method_field('DELETE') }}
-					<button 	type="submit"
-								class="btn btn-primary">
-						Yes
-					</button>
-				</form>
+				<button 	type="button" 
+							id="btnModalConfirm" 
+							class="btn btn-primary">
+					Yes
+				</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 		</div>
 	</div>
 @stop
+
+@section( 'page-script' )
+<script>
+	$('#confirmModal').on('show.bs.modal', function (event) {
+				
+		$('#btnModalConfirm').click( function() {
+
+			$('#deleteJob').submit();
+		});
+
+	})
+</script>
+@endsection

@@ -29,14 +29,15 @@ class JobInvoicesController extends Controller
     public function create( Job $job, Request $request )
     {
         //
-        $invoice = new Invoices;
 
-        $invoice->create( [
+        $invoice = Invoices::create( [
                 'job_id' => $job->id,
             ]
         );
 
         $request->session()->flash('success', 'Successfully created new empty Invoice.');
+
+        /*dd( 'redirecting to route ' .route('jobs.invoices.edit', [ $job, 1 ]), 'invoice->id=' . $invoice->id );*/
 
         return redirect( route('jobs.invoices.show', [ $job, $invoice->id ]) );
     }
@@ -58,9 +59,14 @@ class JobInvoicesController extends Controller
      * @param  \App\Invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job, Invoices $invoices)
+    public function show(Job $job, Invoices $invoice)
     {
         //
+        $invoice->with( 'materials', 'labour' );
+
+        /*dump( $invoice );*/
+
+        return view('jobs.invoices.show', compact('job', 'invoice'));
     }
 
     /**

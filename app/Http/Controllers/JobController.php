@@ -74,8 +74,11 @@ class JobController extends Controller
 	public function show(Job $job)
 	{
 		//
-		$job->with('materials', 'labour');
-		
+		$job->with(	'materials',
+					'labour',
+					'invoices.materials',
+					'invoices.labour');
+
 		return view('jobs.show', compact('job'));
 	}
 

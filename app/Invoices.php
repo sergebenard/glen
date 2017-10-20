@@ -15,12 +15,12 @@ class Invoices extends Model
 
 	public function materials()
 	{
-		return $this->morphMany('App\Materials', 'materialable');
+		return $this->morphMany( Materials::class , 'materialable');
 	}
 
 	public function labour()
 	{
-		return $this->morphMany('App\Labour', 'labourable');
+		return $this->morphMany( Labour::class, 'labourable');
 	}
 
 	public function job()

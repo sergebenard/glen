@@ -106,7 +106,7 @@ class JobLabourController extends Controller
 
 		$labour->save();
 
-		$request->session()->flash('success', "Successfully created new labour entry for Job " . $job->number . "." );
+		$request->session()->flash('success', "Successfully updated entry for Job " . $job->number . "." );
 
 		return redirect( route('jobs.show', $job->id) );
 	}
