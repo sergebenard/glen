@@ -92,6 +92,7 @@
 				<div class="col-12">
 					<div class="card my-3">
 						<div class="card-header">
+							<a name="jobProposals"></a>
 							<div class="h5 mb-1">
 								Proposals
 							</div>
@@ -143,37 +144,81 @@
 				<div class="col-12">
 					<div class="card my-3">
 						<div class="card-header">
+							<a name="jobInvoices"></a>
 							<div class="h5 mb-1">
 								Invoices
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
 						@foreach( $job->invoices as $invoice )
-							<li class="list-group-item {{ ( $invoice->sent ) ? 'list-group-item-success' : 'list-group-item-warning' }}">
+							<li class="list-group-item {{ ( $invoice->sent && $invoice->paid ) ? 'list-group-item-success' : 'list-group-item-warning' }}">
 								<div class="list-group-item-heading">
 									<a href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}" >
 										Invoice {{ $loop->iteration }}
-									</a>
-									<a 	class="btn btn-outline-primary btn-sm float-right"
-										href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
-										Edit
-									</a>
+									</a>	
 								</div>
 								<small class="text-muted">
-									$380 Labor, $422 Material = $802
+									${{ $jobInvoicesMaterialsSum = number_format( $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
+										Material,
+									${{ $jobInvoicesLabourSum = number_format( $invoice->labour->sum('subtotal'), 2, '.', '' ) }}
+										Labour =
+									${{ number_format( $jobInvoicesMaterialsSum + $jobInvoicesLabourSum, 2, '.', '' ) }}
 								</small>
-								-
-								@if ( $invoice->sent )
-								<small class="text-success">
-									Sent
-								</small>
-								@else
-								<small class="text-danger">
-									Unsent
-								</small>
-								@endif
+								<div class="btn-toolbar">
+									<form 	method="POST"
+											action="{{ route('jobs.invoices.destroy', [$job->id, $invoice->id]) }}"
+											enctype="multipart">
+										{{ csrf_field() }}
+										{{ method_field('DELETE') }}
+										<div class="btn-group btn-group-sm mr-2">
+											<a 	class="btn btn-outline-primary"
+												href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
+												Edit
+											</a>
+											<button class="btn btn-outline-danger"
+													type="submit">
+												Delete
+											</button>
+										</div>
+										<div class="btn-group btn-group-sm">
+											@if ( $invoice->sent )
+											<button	class="btn btn-outline-success disabled">
+												Sent
+											</button>
+											@else
+											<div class="btn-group btn-group-sm" role="group">
+												<button type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													Unsent
+												</button>
+												<div class="dropdown-menu">
+													<a class="dropdown-item" href="{{ route('jobs.invoices.send', [$job->id, $invoice->id]) }}">
+														Send with detailed breakdown.
+													</a>
+													<a class="dropdown-item" href="{{ route('jobs.invoices.send', [$job->id, $invoice->id]) }}">
+														Send with summary only.
+													</a>
+												</div>
+											</div>
+											@endif
+											@if ( $invoice->paid )
+											<button	class="btn btn-outline-success disabled">
+												Paid
+											</button>
+											@else
+											<a 	class="btn btn-outline-danger"
+												href="{{ route('jobs.invoices.pay', [$job->id, $invoice->id]) }}">
+												Unpaid
+											</a>
+											@endif
+										</div>
+
 							</li>
 						@endforeach
+						@if( $job->invoices->count() < 1 )
+							<li class="list-group-item">
+								No Invoices.
+							</li>
+						@endif
 						</ul>
 						<div class="card-footer">
 							<a 	class="btn btn-outline-primary btn-block" 
@@ -190,6 +235,7 @@
 				<div class="col-12">
 					<div class="card my-3">
 						<div class="card-header">
+							<a name="jobActual"></a>
 							<div class="h5 mb-1">
 								Actual
 							</div>
@@ -204,9 +250,6 @@
 								<table class="table table-sm mb-0">
 									<tbody>
 									@if( count( $job->materials ) >= 1 )
-										@php
-										$total = 0;
-										@endphp
 										@foreach( $job->materials as $material )
 										<tr>
 											<td class="small text-right" scope="row">
@@ -234,13 +277,12 @@
 											</td>
 											<td class="small text-right">
 												@if( !empty( $material->cost ) )
-												@&nbsp;${{ round( $material->cost, 2 ) }}
+												@&nbsp;${{ $material->cost }}
 												@endif
 											</td>
 											<th class="small text-right table-active">
-												@if( !empty( $material->cost ) )
-												${{ $sub = round( $material->cost * $material->count, 2 ) }}
-												@php( $total += $sub )
+												@if( !empty( $material->subtotal ) )
+												${{ $material->subtotal }}
 												@endif
 											</th>
 										</tr>
@@ -250,8 +292,8 @@
 												Total
 											</th>
 											<th class="small text-right">
-												@if( $total > 0 )
-												${{ round( $total, 2 ) }}
+												@if( $job->materials->sum('subtotal') > 0 )
+												${{ number_format( $job->materials->sum('subtotal'), 2, '.', '' ) }}
 												@endif
 											</th>
 										</tr>
@@ -279,7 +321,6 @@
 								<table class="table table-sm mb-0">
 									<tbody>
 									@if( count( $job->labour ) >= 1 )
-										@php( $total = 0 )
 										@foreach( $job->labour as $labour )
 										<tr>
 											<td class="small text-right" scope="row">
@@ -295,7 +336,7 @@
 												</form>
 											</td>
 											<td class="small text-right">
-												{{ $labour->count }}
+												{{ $labour->count }}&nbsp;<sup>hrs</sup>
 											</td>
 											<td class="small">
 												<a href="{{ route('jobs.labour.edit', [$job->id, $labour->id]) }}">
@@ -304,13 +345,12 @@
 											</td>
 											<td class="small text-right">
 											@if( !empty($labour->wage) )
-												${{ round( $labour->wage, 2 ) }}
+												${{ $labour->wage }}&nbsp;<sup>/hr</sup>
 											@endif
 											</td>
 											<th class="small text-right table-active">
-											@if( !empty($labour->wage) )
-												${{ $sub = round( $labour->count * $labour->wage, 2 ) }}
-												@php( $total += $sub )
+											@if( !empty($labour->subtotal) )
+												${{ $labour->subtotal }}
 											@endif
 											</th>
 										</tr>
@@ -320,8 +360,8 @@
 												Total
 											</th>
 											<th class="small text-right">
-												@if( $total > 0 )
-												${{ round( $total, 2 ) }}
+												@if( $job->labour->sum('subtotal') > 0 )
+												${{ number_format( $job->labour->sum('subtotal'), 2, '.', '' ) }}
 												@endif
 											</th>
 										</tr>

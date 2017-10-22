@@ -57,12 +57,13 @@ class JobMaterialsController extends Controller
 		$material->cost = $request->cost;
 		$material->materialable_id = $job->id;
 		$material->materialable_type = 'App\Job';
+		$material->subtotal = null;
 
 		$material->save();
 
 		$request->session()->flash('success', "Successfully created new material consumed on Job " . $job->number . "." );
 
-		return redirect( route('jobs.show', $job->id) );
+		return redirect( route('jobs.show', $job->id) . "#jobActual" );
 	}
 
 	/**
@@ -109,12 +110,13 @@ class JobMaterialsController extends Controller
 		$material->name = $request->name;
 		$material->description = $request->description;
 		$material->cost = $request->cost;
+        $material->subtotal = null;
 
 		$material->save();
 
 		$request->session()->flash('success', "Successfully updated material consumed on Job " . $job->number . "." );
 
-		return redirect( route('jobs.show', $job->id) );
+		return redirect( route('jobs.show', $job->id) . "#jobActual" );
 	}
 
 	/**
@@ -130,6 +132,6 @@ class JobMaterialsController extends Controller
 
 		$request->session()->flash('success', "Successfully deleted material consumed on Job " . $job->number . ".");
 
-		return redirect( route('jobs.show', $job->id) );
+		return redirect( route('jobs.show', $job->id) . "#jobActual" );
 	}
 }

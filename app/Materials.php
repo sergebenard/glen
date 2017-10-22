@@ -12,6 +12,7 @@ class Materials extends Model
 		'count',
 		'description',
 		'cost',
+		'subtotal',
 		'materialable_id',
 		'materialable_type',
 	];
@@ -21,13 +22,31 @@ class Materials extends Model
 		return $this->morphTo();
 	}
 
-	public Function setNameAttribute( $value )
+	public function setNameAttribute( $value )
 	{
 		$this->attributes['name'] = ucwords( $value );
 	}
 
-	public Function setDescriptionAttribute( $value )
+	public function setDescriptionAttribute( $value )
 	{
 		$this->attributes['description'] = ucwords( $value );
+	}
+
+	public function setSubtotalAttribute( $value )
+	{
+		if( $this->attributes['cost'] > 0 )
+		{
+			$this->attributes['subtotal'] = round( $this->attributes['cost'] * $this->attributes['count'], 2 );
+		}
+	}
+
+	public function getCostAttribute( $value )
+	{
+		return ( !is_null( $value ) ) ? number_format($value, 2, '.', '') : $value;
+	}
+
+	public function getSubtotalAttribute( $value )
+	{
+		return ( !is_null( $value ) ) ? number_format($value, 2, '.', '') : $value;
 	}
 }

@@ -135,7 +135,18 @@ class JobController extends Controller
 	public function destroy(Job $job)
 	{
 		//
-		$job->delete();
+		foreach( $job->invoices as $invoice )
+        {
+            $invoice->materials()->delete();
+            $invoice->labour()->delete();
+
+            $invoice->delete();
+        }
+
+        $job->materials()->delete();
+        $job->labour()->delete();
+
+        $job->delete();
 
 		Session::flash("success", "Successfully deleted Job.");
 

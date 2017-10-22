@@ -39,7 +39,7 @@ class JobInvoicesController extends Controller
 
         /*dd( 'redirecting to route ' .route('jobs.invoices.edit', [ $job, 1 ]), 'invoice->id=' . $invoice->id );*/
 
-        return redirect( route('jobs.invoices.show', [ $job, $invoice->id ]) );
+        return redirect( route('jobs.invoices.show', [ $job, $invoice->id ]) . "#jobInvoices" );
     }
 
     /**
@@ -98,8 +98,37 @@ class JobInvoicesController extends Controller
      * @param  \App\Invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Invoices $invoices)
+    public function destroy(Job $job, Invoices $invoice, Request $request)
     {
         //
+        $invoice->materials()->delete();
+        $invoice->labour()->delete();
+        $invoice->delete();
+
+        $request->session()->flash('success', 'Successfully deleted invoice from Job ' . $job->number .'.');
+
+        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+    }
+
+    public function send( Job $job, Invoices $invoice, Request $request )
+    {
+        $invoice->sent = 1;
+
+        $invoice->save();
+
+        $request->session()->flash('success', 'Successfully sent invoice for Job ' . $job->number . '.');
+
+        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+    }
+
+    public function pay( Job $job, Invoices $invoice, Request $request )
+    {
+        $invoice->paid = 1;
+
+        $invoice->save();
+
+        $request->session()->flash('success', 'Successfully marked invoice for Job ' . $job->number . ' as paid.');
+
+        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
     }
 }

@@ -23,9 +23,6 @@
 					<table class="table table-sm mb-0">
 						<tbody>
 						@if( count( $invoice->materials ) >= 1 )
-							@php
-							$total = 0;
-							@endphp
 							@foreach( $invoice->materials as $material )
 							<tr>
 								<td class="small text-right" scope="row">
@@ -53,13 +50,12 @@
 								</td>
 								<td class="small text-right">
 									@if( !empty( $material->cost ) )
-									@&nbsp;${{ round( $material->cost, 2 ) }}
+									@&nbsp;${{ $material->cost }}
 									@endif
 								</td>
 								<th class="small text-right table-active">
 									@if( !empty( $material->cost ) )
-									${{ $sub = round( $material->cost * $material->count, 2 ) }}
-									@php( $total += $sub )
+									${{ $material->subtotal }}
 									@endif
 								</th>
 							</tr>
@@ -69,8 +65,8 @@
 									Total
 								</th>
 								<th class="small text-right">
-									@if( $total > 0 )
-									${{ round( $total, 2 ) }}
+									@if( $invoice->materials->sum('subtotal') > 0 )
+									${{ number_format( $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
 									@endif
 								</th>
 							</tr>
@@ -101,7 +97,6 @@
 					<table class="table table-sm mb-0">
 						<tbody>
 						@if( count( $invoice->labour ) >= 1 )
-							@php( $total = 0 )
 							@foreach( $invoice->labour as $labour )
 							<tr>
 								<td class="small text-right" scope="row">
@@ -126,13 +121,12 @@
 								</td>
 								<td class="small text-right">
 								@if( !empty($labour->wage) )
-									${{ round( $labour->wage, 2 ) }}
+									${{ $labour->wage }}
 								@endif
 								</td>
 								<th class="small text-right table-active">
 								@if( !empty($labour->wage) )
-									${{ $sub = round( $labour->count * $labour->wage, 2 ) }}
-									@php( $total += $sub )
+									${{ $labour->subtotal }}
 								@endif
 								</th>
 							</tr>
@@ -142,8 +136,8 @@
 									Total
 								</th>
 								<th class="small text-right">
-									@if( $total > 0 )
-									${{ round( $total, 2 ) }}
+									@if( $invoice->labour->sum('subtotal') > 0 )
+									${{ number_format( $invoice->labour->sum('subtotal'), 2, '.', '' ) }}
 									@endif
 								</th>
 							</tr>

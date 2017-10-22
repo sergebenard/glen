@@ -52,12 +52,13 @@ class JobLabourController extends Controller
 		$labour->wage = $request->wage;
 		$labour->labourable_id = $job->id;
 		$labour->labourable_type = 'App\Job';
+		$labour->subtotal = null;
 
 		$labour->save();
 
 		$request->session()->flash('success', "Successfully created new labour entry for Job " . $job->number . "." );
 
-		return redirect( route('jobs.show', $job->id) );
+		return redirect( route('jobs.show', $job->id) . "#jobActual" );
 	}
 
 	/**
@@ -103,12 +104,13 @@ class JobLabourController extends Controller
 		$labour->count = $request->count;
 		$labour->description = $request->description;
 		$labour->wage = $request->wage;
+		$labour->subtotal = null;
 
 		$labour->save();
 
 		$request->session()->flash('success', "Successfully updated entry for Job " . $job->number . "." );
 
-		return redirect( route('jobs.show', $job->id) );
+		return redirect( route('jobs.show', $job->id) . "#jobActual" );
 	}
 
 	/**
@@ -124,6 +126,6 @@ class JobLabourController extends Controller
 
 		$request->session()->flash('success', "Successfully deleted labour entry for Job " . $job->number . "." );
 
-		return redirect( route('jobs.show', $job->id) );
+		return redirect( route('jobs.show', $job->id) . "#jobActual" );
 	}
 }

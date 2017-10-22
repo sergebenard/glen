@@ -52,6 +52,7 @@ class JobInvoicesLabourController extends Controller
         $labour->wage = $request->wage;
         $labour->labourable_id = $invoice->id;
         $labour->labourable_type = 'App\Invoices';
+        $labour->subtotal = null;
 
         $labour->save();
 
@@ -102,6 +103,7 @@ class JobInvoicesLabourController extends Controller
         $labour->count = $request->count;
         $labour->description = $request->description;
         $labour->wage = $request->wage;
+        $labour->subtotal = null;
 
         $labour->save();
 

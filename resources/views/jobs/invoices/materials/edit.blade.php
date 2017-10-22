@@ -27,7 +27,7 @@
 					name="count"
 					class="form-control {{ $errors->has('count') ? 'is-invalid' :'' }}"
 					id="materialAmount"
-					value="{{ old('count', '1', $material->count) }}"
+					value="{{ old('count', $material->count) }}"
 					step="any"
 					autocomplete="off"
 					min="1"

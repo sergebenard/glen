@@ -54,6 +54,7 @@ class JobInvoicesMaterialsController extends Controller
         $material->cost = $request->cost;
         $material->materialable_id = $invoice->id;
         $material->materialable_type = 'App\Invoices';
+        $material->subtotal = null;
 
         $material->save();
 
@@ -92,7 +93,7 @@ class JobInvoicesMaterialsController extends Controller
      * @param  \App\Materials  $materials
      * @return \Illuminate\Http\Response
      */
-    public function update(Job $job, Invoices $invoice, Request $request, Materials $materials)
+    public function update(Job $job, Invoices $invoice, Request $request, Materials $material)
     {
         //
         //
@@ -107,12 +108,17 @@ class JobInvoicesMaterialsController extends Controller
         $material->name = $request->name;
         $material->description = $request->description;
         $material->cost = $request->cost;
+        $material->subtotal = null;
+        /*if ( $request->cost > 0 )
+        {
+            $material->subtotal = round( $request->count * $request->cost, 2 );
+        }*/
 
         $material->save();
 
         $request->session()->flash('success', "Successfully updated material on invoice." );
 
-        dd( 'Route: ' . route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        //dd( 'Route: ' . route('jobs.invoices.show', [$job->id, $invoice->id]) );
 
         return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
     }
