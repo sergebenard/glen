@@ -17,7 +17,7 @@ class CreateProposalsTable extends Migration
             $table->increments('id');
             $table->integer('job_id')->unsigned();
             $table->boolean('sent')->default(0);
-            $table->enum('status', ['approved', 'refused', 'undecided'])->default(0);
+            $table->enum('status', ['approved', 'refused', 'undecided'])->default('undecided');
             $table->timestamps();
         });
     }
