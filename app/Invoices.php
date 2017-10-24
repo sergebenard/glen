@@ -18,6 +18,13 @@ class Invoices extends Model
 		return $this->morphMany( Materials::class , 'materialable');
 	}
 
+	public function togglePaid()
+	{
+		$this->paid = !$this->paid;
+
+		return $this;
+	}
+
 	public function labour()
 	{
 		return $this->morphMany( Labour::class, 'labourable');

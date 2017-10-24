@@ -78,43 +78,22 @@
 				Cancel
 			</a>
 		</div>
-		<div class="form-group">
-			<button 	type="button"
-						class="btn btn-outline-danger btn-block"
-						data-toggle="modal"
-						data-target="#confirmModal">
-				Delete
-			</button>
-		</div>
 	</form>
-
-	<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" id="confirmModal">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Deleting Labour</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<p>Are you sure you want to delete this labour entry?</p>
-				</div>
-				<div class="modal-footer">
-					<form 	action="{{ route('jobs.labour.destroy', [$job->id, $labour->id]) }}"
-							method="POST"
-							enctype="multipart/data">
-						{{ csrf_field() }}
-						{{ method_field('DELETE') }}
-						<button 	type="submit" 
-									id="btnModalConfirm" 
-									class="btn btn-primary">
-							Yes
-						</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</form>
-				</div>
-			</div>
-		</div>
+	<form 	id="labour-delete" 
+			method="POST"
+			action="{{ route('jobs.invoices.labour', [$job->id, $invoice->id, $labour->id]) }}"
+			enctype="multipart">
+		{{ csrf_field() }}
+		{{ method_field('DELETE') }}
+	</form>
+	<div class="form-group">
+		<button 	data-toggle="modal"
+					type="button"
+					data-target="#confirmModal"
+					data-titletext = "Delete Invoice"
+					data-formid="labour-delete"
+					class="btn btn-outline-danger btn-block">
+			<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
+		</button>
 	</div>
 @stop

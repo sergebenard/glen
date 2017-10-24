@@ -14,7 +14,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div class="card my-3">
-				<a href="https://www.google.com/maps/place/{{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+				<a href="https://www.google.com/search?api=1&query={{ urlencode( $job->address ) }}" target="_blank">
 				<img 	class="card-img-top"
 						src="https://maps.googleapis.com/maps/api/staticmap?size=512x512&scale=2&maptype=roadmap\&markers=size:mid%7Ccolor:red%7C{{ urlencode( $job->address ) }}&key=AIzaSyC3uTBSLuDdTdq_XSYPXhNR5Y1EwiPClFw" alt="Address">
 				</a>
@@ -37,7 +37,7 @@
 					@endif
 					@if( !empty( $job->address ) )
 					<li class="list-group-item">
-						<a href="https://www.google.com/maps/search/?api=1&query={{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+						<a href="https://maps.google.com/search?api=1&query={{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
 							{{ $job->address }}
 						</a>
 					</li>
@@ -68,11 +68,11 @@
 						<i class="fa fa-pencil" aria-hidden="true"></i>
 						Edit
 					</a>
-					<button 	type="button" 
-								data-toggle="modal"
+					<button 	data-toggle="modal"
+								type="button" 
 								data-target="#confirmModal"
-								data-record="{{ $job->id }}"
-								data-number="{{ $job->number }}"
+								data-titletext = "Delete Job"
+								data-formid="deleteJob"
 								class="btn btn-outline-danger">
 						<i class="fa fa-trash" aria-hidden="true"></i>
 						Delete
@@ -157,32 +157,55 @@
 										Invoice {{ $loop->iteration }}
 									</a>	
 								</div>
-								<small class="text-muted">
 									${{ $jobInvoicesMaterialsSum = number_format( $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
-										Material,
+									<span class="align-baseline text-muted small">Mat.</span>
+									+
 									${{ $jobInvoicesLabourSum = number_format( $invoice->labour->sum('subtotal'), 2, '.', '' ) }}
-										Labour =
+									<span class="align-baseline text-muted small">
+										({{ round( $invoice->labour->sum('count'), 2 ) }}
+										<span class="align-baseline text-muted small">/{{ str_plural('hr', $invoice->labour->sum('count')) }}</span>)
+										Lab.
+									</span>
+									=
 									${{ number_format( $jobInvoicesMaterialsSum + $jobInvoicesLabourSum, 2, '.', '' ) }}
-								</small>
 								<div class="btn-toolbar">
-									<form 	method="POST"
+									<form 	id="invoice-delete-{{ $invoice->id }}" 
+											method="POST"
 											action="{{ route('jobs.invoices.destroy', [$job->id, $invoice->id]) }}"
 											enctype="multipart">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
+									</form>
+									<form 	id="invoice-send-{{ $invoice->id }}" 
+											method="POST"
+											action="{{ route('jobs.invoices.send', [$job->id, $invoice->id]) }}"
+											enctype="multipart">
+										{{ csrf_field() }}
+									</form>
+									<form 	id="invoice-pay-{{ $invoice->id }}" 
+											method="POST"
+											action="{{ route('jobs.invoices.pay', [$job->id, $invoice->id]) }}"
+											enctype="multipart">
+										{{ csrf_field() }}
+									</form>
 										<div class="btn-group btn-group-sm mr-2">
 											<a 	class="btn btn-outline-primary"
 												href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
 												Edit
 											</a>
-											<button class="btn btn-outline-danger"
-													type="submit">
+											<button 	data-toggle="modal"
+														type="button" 
+														data-target="#confirmModal"
+														data-titletext = "Delete Invoice"
+														data-formid="invoice-delete-{{ $invoice->id }}"
+														class="btn btn-sm btn-outline-danger">
+												<i class="fa fa-trash" aria-hidden="true"></i>
 												Delete
 											</button>
 										</div>
 										<div class="btn-group btn-group-sm">
 											@if ( $invoice->sent )
-											<button	class="btn btn-outline-success disabled">
+											<button	class="btn btn-outline-success disabled" type="button">
 												Sent
 											</button>
 											@else
@@ -191,24 +214,55 @@
 													Unsent
 												</button>
 												<div class="dropdown-menu">
-													<a class="dropdown-item" href="{{ route('jobs.invoices.send', [$job->id, $invoice->id]) }}">
-														Send with detailed breakdown.
+												@if( !empty( $job->email ) )
+													<button 	data-toggle="modal"
+																data-target="#confirmModal"
+																data-titletext = "Email Detailed Invoice"
+																data-formid="invoice-send-{{ $invoice->id }}"
+																class="dropdown-item">
+														Email with detailed breakdown.
+													</button>
+													<button 	data-toggle="modal"
+																data-target="#confirmModal"
+																data-titletext = "Email Summary Invoice"
+																data-formid="invoice-send-{{ $invoice->id }}"
+																class="dropdown-item">
+														Email with summary only.
+													</button>
+													<div class="dropdown-divider"></div>
+												@endif
+													<a 	class="dropdown-item" 
+														href="{{ route('jobs.invoices.print', [$job->id, $invoice->id]) }}"
+														target="_blank">
+														Print To Snail Mail Invoice
 													</a>
-													<a class="dropdown-item" href="{{ route('jobs.invoices.send', [$job->id, $invoice->id]) }}">
-														Send with summary only.
-													</a>
+													<button 	data-toggle="modal"
+																data-target="#confirmModal"
+																data-titletext = "Mark Mailed Invoice as Sent"
+																data-formid="invoice-send-{{ $invoice->id }}"
+																class="dropdown-item">
+														Mark mailed invoice as sent.
+													</button>
+
 												</div>
 											</div>
 											@endif
 											@if ( $invoice->paid )
-											<button	class="btn btn-outline-success disabled">
+											<button 	data-toggle="modal"
+														data-target="#confirmModal"
+														data-titletext = "Mark Invoice as Unpaid"
+														data-formid="invoice-pay-{{ $invoice->id }}"
+														class="btn btn-outline-success disabled">
 												Paid
 											</button>
 											@else
-											<a 	class="btn btn-outline-danger"
-												href="{{ route('jobs.invoices.pay', [$job->id, $invoice->id]) }}">
+											<button 	data-toggle="modal"
+														data-target="#confirmModal"
+														data-titletext = "Mark Invoice as Paid"
+														data-formid="invoice-pay-{{ $invoice->id }}"
+														class="btn btn-outline-danger">
 												Unpaid
-											</a>
+											</button>
 											@endif
 										</div>
 
@@ -254,15 +308,19 @@
 										<tr>
 											<td class="small text-right" scope="row">
 												<form 	method="POST"
-														id="formDeleteMaterial-{{ $material->id }}"
+														id="material-{{ $material->id }}"
 														action="{{ route('jobs.materials.destroy', [ $job->id, $material->id ]) }}"
 														enctype="multipart/data">
 													{{ csrf_field() }}
 													{{ method_field('DELETE') }}
-													<button class="btn btn-outline-danger p-0 px-1">
-														<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
-													</button>
 												</form>
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Delete Material"
+															data-formid="material-{{ $material->id }}"
+															class="btn btn-outline-danger p-0 px-1">
+													<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
+												</button>
 											</td>
 											<td class="small text-right">
 												{{ $material->count }}
@@ -325,18 +383,23 @@
 										<tr>
 											<td class="small text-right" scope="row">
 												<form 	method="POST"
-														id="formDeleteLabour-{{ $labour->id }}"
+														id="labour-{{ $labour->id }}"
 														action="{{ route('jobs.labour.destroy', [ $job->id, $labour->id ]) }}"
 														enctype="multipart/data">
 													{{ csrf_field() }}
 													{{ method_field('DELETE') }}
-													<button class="btn btn-outline-danger p-0 px-1">
-														<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
-													</button>
 												</form>
+												
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Delete Labour Entry"
+															data-formid="labour-{{ $labour->id }}"
+															class="btn btn-outline-danger p-0 px-1">
+													<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
+												</button>
 											</td>
 											<td class="small text-right">
-												{{ $labour->count }}&nbsp;<sup>hrs</sup>
+												{{ $labour->count }}&nbsp;<sup>{{ str_plural('hr', $labour->count) }}</sup>
 											</td>
 											<td class="small">
 												<a href="{{ route('jobs.labour.edit', [$job->id, $labour->id]) }}">
@@ -385,33 +448,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" id="confirmModal">
-		<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Deleting Job {{ $job->number }}</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Are you sure you want to delete this job?</p>
-			</div>
-			<div class="modal-footer">
-				<form 	method="POST"
-						id="formDeletelabour-{{ $job->id }}"
-						action="{{ route('jobs.destroy', $job->id) }}"
-						enctype="multipart/data">
-					{{ csrf_field() }}
-					{{ method_field('DELETE') }}
-					<button 	type="submit"
-								class="btn btn-primary">
-						Yes
-					</button>
-				</form>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-		</div>
-	</div>
+@stop
+
+@section('page-script')
+@include('partials.modal-confirm')
 @stop

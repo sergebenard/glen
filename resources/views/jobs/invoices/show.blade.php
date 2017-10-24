@@ -27,15 +27,20 @@
 							<tr>
 								<td class="small text-right" scope="row">
 									<form 	method="POST"
-											id="formDeleteMaterial-{{ $material->id }}"
+											id="material-{{ $material->id }}"
 											action="{{ route('jobs.invoices.materials.destroy', [ $job->id, $invoice->id, $material->id ]) }}"
 											enctype="multipart/data">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
-										<button class="btn btn-outline-danger p-0 px-1">
-											<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
-										</button>
 									</form>
+									<button 	data-toggle="modal"
+												type="button" 
+												data-target="#confirmModal"
+												data-titletext = "Delete Material"
+												data-formid="material-{{ $material->id }}"
+												class="btn btn-outline-danger p-0 px-1">
+										<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
+									</button>
 								</td>
 								<td class="small text-right">
 									{{ $material->count }}
@@ -101,18 +106,23 @@
 							<tr>
 								<td class="small text-right" scope="row">
 									<form 	method="POST"
-											id="formDeleteLabour-{{ $labour->id }}"
+											id="labour-{{ $labour->id }}"
 											action="{{ route('jobs.invoices.labour.destroy', [ $job->id, $invoice->id, $labour->id ]) }}"
 											enctype="multipart/data">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
-										<button class="btn btn-outline-danger p-0 px-1">
-											<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
-										</button>
 									</form>
+									<button 	data-toggle="modal"
+												type="button" 
+												data-target="#confirmModal"
+												data-titletext = "Delete Labour"
+												data-formid="labour-{{ $labour->id }}"
+												class="btn btn-outline-danger p-0 px-1">
+										<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
+									</button>
 								</td>
 								<td class="small text-right">
-									{{ $labour->count }}
+									{{ $labour->count }}&nbsp;<sup>/{{ str_plural( 'hr', $labour->count ) }}</sup>
 								</td>
 								<td class="small">
 									<a href="{{ route('jobs.invoices.labour.edit', [$job->id, $invoice->id, $labour->id]) }}">
@@ -161,15 +171,6 @@
 		</div>
 @stop
 
-@section( 'page-script' )
-<script>
-	$('#confirmModal').on('show.bs.modal', function (event) {
-				
-		$('#btnModalConfirm').click( function() {
-
-			$('#deleteInvoice').submit();
-		});
-
-	})
-</script>
-@endsection
+@section('page-script')
+@include('partials.modal-confirm')
+@stop

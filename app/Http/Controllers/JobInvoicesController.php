@@ -123,12 +123,14 @@ class JobInvoicesController extends Controller
 
     public function pay( Job $job, Invoices $invoice, Request $request )
     {
-        $invoice->paid = 1;
+        $invoice->togglePaid()->save();
 
-        $invoice->save();
-
-        $request->session()->flash('success', 'Successfully marked invoice for Job ' . $job->number . ' as paid.');
-
+        $request->session()->flash('success', 'Successfully changed paid status for Job ' . $job->number . ' invoice.');
         return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+    }
+
+    public function print( Job $job, Invoices $invoice, Request $request )
+    {
+        return view('jobs.invoices.printout', compact('job', 'invoice'));
     }
 }

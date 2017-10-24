@@ -15,7 +15,7 @@ class UpdateMaterialsTable extends Migration
     {
         Schema::table('materials', function (Blueprint $table) {
             //
-            $table->decimal('sub', 9, 2)->unsigned()->nullable();
+            $table->decimal('subtotal', 9, 2)->unsigned()->nullable();
         });
 
         Schema::table('labours', function (Blueprint $table) {
