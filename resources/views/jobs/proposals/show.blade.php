@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Job ' .$job->number .' Invoice')
+@section('page-title', 'Job ' .$job->number .' Proposal')
 
 @section('page-breadcrumbs')
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.index') }}">Jobs</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $job->id) }}">{{ $job->number }}</a></li>
-		<li class="breadcrumb-item active">Invoice</li>
+		<li class="breadcrumb-item active">Proposal</li>
 	</ol>
 @endsection
 
@@ -22,13 +22,13 @@
 					</div>
 					<table class="table table-sm mb-0">
 						<tbody>
-						@if( count( $invoice->materials ) >= 1 )
-							@foreach( $invoice->materials as $material )
+						@if( count( $proposal->materials ) >= 1 )
+							@foreach( $proposal->materials as $material )
 							<tr>
 								<td class="small text-right" scope="row">
 									<form 	method="POST"
 											id="material-{{ $material->id }}"
-											action="{{ route('jobs.invoices.materials.destroy', [ $job->id, $invoice->id, $material->id ]) }}"
+											action="{{ route('jobs.proposals.materials.destroy', [ $job->id, $proposal->id, $material->id ]) }}"
 											enctype="multipart/data">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
@@ -46,7 +46,7 @@
 									{{ $material->count }}
 								</td>
 								<td class="small">
-									<a 	href="{{ route('jobs.invoices.materials.edit', [$job->id, $invoice->id, $material->id]) }}">
+									<a 	href="{{ route('jobs.proposals.materials.edit', [$job->id, $proposal->id, $material->id]) }}">
 										{{ $material->name }}
 									</a>
 								</td>
@@ -70,8 +70,8 @@
 									Total
 								</th>
 								<th class="small text-right">
-									@if( $invoice->materials->sum('subtotal') > 0 )
-									${{ number_format( $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
+									@if( $proposal->materials->sum('subtotal') > 0 )
+									${{ number_format( $proposal->materials->sum('subtotal'), 2, '.', '' ) }}
 									@endif
 								</th>
 							</tr>
@@ -86,7 +86,7 @@
 					</table>
 					<div class="card-footer">
 						<a 	class="btn btn-outline-primary btn-block" 
-							href="{{ route('jobs.invoices.materials.create', [$job->id, $invoice->id] ) }}">
+							href="{{ route('jobs.proposals.materials.create', [$job->id, $proposal->id] ) }}">
 							New
 						</a>
 					</div>
@@ -101,13 +101,13 @@
 					</div><!-- /card-header -->
 					<table class="table table-sm mb-0">
 						<tbody>
-						@if( count( $invoice->labour ) >= 1 )
-							@foreach( $invoice->labour as $labour )
+						@if( count( $proposal->labour ) >= 1 )
+							@foreach( $proposal->labour as $labour )
 							<tr>
 								<td class="small text-right" scope="row">
 									<form 	method="POST"
 											id="labour-{{ $labour->id }}"
-											action="{{ route('jobs.invoices.labour.destroy', [ $job->id, $invoice->id, $labour->id ]) }}"
+											action="{{ route('jobs.proposals.labour.destroy', [ $job->id, $proposal->id, $labour->id ]) }}"
 											enctype="multipart/data">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
@@ -125,7 +125,7 @@
 									{{ $labour->count }}&nbsp;<sup>/{{ str_plural( 'hr', $labour->count ) }}</sup>
 								</td>
 								<td class="small">
-									<a href="{{ route('jobs.invoices.labour.edit', [$job->id, $invoice->id, $labour->id]) }}">
+									<a href="{{ route('jobs.proposals.labour.edit', [$job->id, $proposal->id, $labour->id]) }}">
 										{{ $labour->description }}
 									</a>
 								</td>
@@ -146,8 +146,8 @@
 									Total
 								</th>
 								<th class="small text-right">
-									@if( $invoice->labour->sum('subtotal') > 0 )
-									${{ number_format( $invoice->labour->sum('subtotal'), 2, '.', '' ) }}
+									@if( $proposal->labour->sum('subtotal') > 0 )
+									${{ number_format( $proposal->labour->sum('subtotal'), 2, '.', '' ) }}
 									@endif
 								</th>
 							</tr>
@@ -162,7 +162,7 @@
 					</table>
 					<div class="card-footer">
 						<a 	class="btn btn-outline-primary btn-block" 
-							href="{{ route('jobs.invoices.labour.create', [$job->id, $invoice->id]) }}">
+							href="{{ route('jobs.proposals.labour.create', [$job->id, $proposal->id]) }}">
 							New
 						</a>
 					</div>

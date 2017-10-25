@@ -14,7 +14,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div class="card my-3">
-				<a href="https://www.google.com/search?api=1&query={{ urlencode( $job->address ) }}" target="_blank">
+				<a href="https://maps.google.com?q={{ urlencode( $job->address ) }}" target="_blank">
 				<img 	class="card-img-top"
 						src="https://maps.googleapis.com/maps/api/staticmap?size=512x512&scale=2&maptype=roadmap\&markers=size:mid%7Ccolor:red%7C{{ urlencode( $job->address ) }}&key=AIzaSyC3uTBSLuDdTdq_XSYPXhNR5Y1EwiPClFw" alt="Address">
 				</a>
@@ -37,7 +37,7 @@
 					@endif
 					@if( !empty( $job->address ) )
 					<li class="list-group-item">
-						<a href="https://maps.google.com/search?api=1&query={{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+						<a href="https://maps.google.com?q={{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
 							{{ $job->address }}
 						</a>
 					</li>
@@ -98,42 +98,158 @@
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
-							<li class="list-group-item list-group-item-warning">
+						@foreach( $job->proposals as $proposal )
+							@php
+							$listGroupBackground = 'list-group-item-warning';
+							switch( strtolower($proposal->status) )	{
+								case 'approved':
+									$listGroupBackground = 'list-group-item-success';
+									break;
+								case 'refused':
+									$listGroupBackground = 'list-group-item-danger';
+									break;
+							}
+
+							@endphp
+							<li class="list-group-item {{ $listGroupBackground }}">
 								<div class="list-group-item-heading">
-									Proposal 1
-									<a 	class="btn btn-outline-primary btn-sm float-right mx-auto"
-										href="#">
-										Edit
+									<a href="{{ route('jobs.proposals.show', [$job->id, $proposal->id]) }}">
+										Proposal {{ $loop->iteration }}
 									</a>
+								</div><!-- /.list-group-item -->
+								<table class="table table-sm">
+									<thead>
+										<tr class="table-active">
+											<th scope="col">Material</th>
+											<th scope="col">Labour</th>
+											<th scope="col">Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td scope="row">
+												${{ $jobProposalsMaterialsSum = number_format( $proposal->materials->sum('subtotal'), 2, '.', '' ) }}
+											</td>
+											<td>
+												${{ $jobProposalsLabourSum = number_format( $proposal->labour->sum('subtotal'), 2, '.', '' ) }}
+												
+												<span class="align-baseline text-muted">
+													({{ round( $proposal->labour->sum('count'), 2 ) }} {{ str_plural('hr', $proposal->labour->sum('count')) }})
+												</span>
+											</td>
+											<th class="table-active">
+												${{ number_format( $jobProposalsMaterialsSum + $jobProposalsLabourSum, 2, '.', '' ) }}
+											</th>
+										</tr>
+									</tbody>
+								</table>
+								
+								<div class="btn-toolbar">
+									<form 	id="invoice-delete-{{ $proposal->id }}" 
+											method="POST"
+											action="{{ route('jobs.proposals.destroy', [$job->id, $proposal->id]) }}"
+											enctype="multipart">
+										{{ csrf_field() }}
+										{{ method_field('DELETE') }}
+									</form>
+									<form 	id="invoice-toggle-send-{{ $proposal->id }}" 
+											method="POST"
+											action="{{ route('jobs.proposals.toggleSend', [$job->id, $proposal->id]) }}"
+											enctype="multipart">
+										{{ csrf_field() }}
+									</form>
+									<div class="btn-group btn-group-sm mr-2">
+										<a 	class="btn btn-outline-primary"
+											href="{{ route('jobs.proposals.show', [$job->id, $proposal->id]) }}">
+											Edit
+										</a>
+										<button 	data-toggle="modal"
+													type="button" 
+													data-target="#confirmModal"
+													data-titletext = "Delete Invoice"
+													data-formid="invoice-delete-{{ $proposal->id }}"
+													class="btn btn-sm btn-outline-danger">
+											Delete
+										</button>
+									</div>
+									<div class="btn-group btn-group-sm">
+										<button type="button" class="btn {{ $btnColour = ( $proposal->sent ) ? 'btn-success' : 'btn-outline-danger' }}">
+											{{ ( $proposal->sent ) ? 'Sent' : 'Unsent' }}
+										</button>
+										<button type="button" class="btn {{ $btnColour }} dropdown-toggle dropdown-toggle-split mr-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										<div class="dropdown-menu">
+										@if( !empty( $job->email ) )
+											<form 	id="invoice-send-{{ $proposal->id }}" 
+													method="POST"
+													action="{{ route('jobs.proposals.send', [$job->id, $proposal->id]) }}"
+													enctype="multipart">
+												{{ csrf_field() }}
+											</form>
+											<button 	data-toggle="modal"
+														data-target="#confirmModal"
+														data-titletext = "Email Detailed Invoice"
+														data-formid="invoice-send-{{ $proposal->id }}"
+														class="dropdown-item">
+												Email detailed breakdown.
+											</button>
+											<button 	data-toggle="modal"
+														data-target="#confirmModal"
+														data-titletext = "Email Summary Invoice"
+														data-formid="invoice-send-{{ $proposal->id }}"
+														class="dropdown-item">
+												Email summary only.
+											</button>
+											<div class="dropdown-divider"></div>
+										@endif
+											<a 	class="dropdown-item" 
+												href="{{ route('jobs.proposals.print', [$job->id, $proposal->id]) }}"
+												target="_blank">
+												Print <em>Snail Mail</em> proposal
+											</a>
+											<button 	data-toggle="modal"
+														data-target="#confirmModal"
+														data-titletext = "Mark Mailed Invoice as {{ ( $proposal->sent ? 'Unsent' : 'Sent' ) }}"
+														data-formid="invoice-toggle-send-{{ $proposal->id }}"
+														class="dropdown-item">
+												Mark proposal as {{ ( $proposal->sent ? 'unsent' : 'sent' ) }}.
+											</button>
+										</div>
+										
+										<div class="btn-group btn-group-sm">
+											<button type="button" class="btn {{ $btnColour = ( $proposal->status !== 'approved' ) ? 'btn-outline-danger' : 'btn-success' }}">
+												{{ ucwords( $proposal->status ) }}
+											</button>
+											<button type="button" class="btn {{ $btnColour }} dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<span class="sr-only">Toggle Dropdown</span>
+											</button>
+											<div class="dropdown-menu">
+											@if( $proposal->status !== 'approved' )
+												<a class="dropdown-item" href="{{ route('jobs.proposals.changeStatus', [$job->id, $proposal->id, 'approved']) }}">
+													Approved
+												</a>
+											@endif
+											@if( $proposal->status !== 'refused' )
+												<a class="dropdown-item" href="{{ route('jobs.proposals.changeStatus', [$job->id, $proposal->id, 'refused']) }}">
+													Refused
+												</a>
+											@endif
+											@if( $proposal->status !== 'undecided' )
+												<a class="dropdown-item" href="{{ route('jobs.proposals.changeStatus', [$job->id, $proposal->id, 'undecided']) }}">
+													Undecided
+												</a>
+											@endif
+											</div><!-- /dropdown-menu -->
+										</div>
+									</div>
 								</div>
-								<small class="text-muted">
-									$370 Labor, $422 Material = $792
-								</small>
-								-
-								<small class="text-danger">
-									Refused
-								</small>
 							</li>
-							<li class="list-group-item list-group-item-success">
-								<div class="list-group-item-heading">
-									Proposal 2
-									<a 	class="btn btn-outline-primary btn-sm float-right"
-										href="#">
-										Edit
-									</a>
-								</div>
-								<small class="text-muted">
-									$380 Labor, $422 Material = $802
-								</small>
-								-
-								<small class="text-success">
-									Approved
-								</small>
-							</li>
+						@endforeach
 						</ul>
 						<div class="card-footer">
 							<a 	class="btn btn-outline-primary btn-block" 
-								href="#">
+								href="{{ route('jobs.proposals.create', $job->id) }}">
 								New
 							</a>
 						</div>
@@ -151,23 +267,23 @@
 						</div>
 						<ul class="list-group list-group-flush">
 						@foreach( $job->invoices as $invoice )
-							<li class="list-group-item {{ ( $invoice->sent && $invoice->paid ) ? 'list-group-item-success' : 'list-group-item-warning' }}">
+							<li class="list-group-item {{ ( $invoice->paid ) ? 'list-group-item-success' : 'list-group-item-warning' }}">
 								<div class="list-group-item-heading">
 									<a href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}" >
 										Invoice {{ $loop->iteration }}
 									</a>	
 								</div>
-									${{ $jobInvoicesMaterialsSum = number_format( $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
-									<span class="align-baseline text-muted small">Mat.</span>
-									+
-									${{ $jobInvoicesLabourSum = number_format( $invoice->labour->sum('subtotal'), 2, '.', '' ) }}
-									<span class="align-baseline text-muted small">
-										({{ round( $invoice->labour->sum('count'), 2 ) }}
-										<span class="align-baseline text-muted small">/{{ str_plural('hr', $invoice->labour->sum('count')) }}</span>)
-										Lab.
-									</span>
-									=
-									${{ number_format( $jobInvoicesMaterialsSum + $jobInvoicesLabourSum, 2, '.', '' ) }}
+								${{ $jobInvoicesMaterialsSum = number_format( $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
+								<span class="align-baseline text-muted small">Mat.</span>
+								+
+								${{ $jobInvoicesLabourSum = number_format( $invoice->labour->sum('subtotal'), 2, '.', '' ) }}
+								<span class="align-baseline text-muted small">
+									({{ round( $invoice->labour->sum('count'), 2 ) }}
+									<span class="align-baseline text-muted small">/{{ str_plural('hr', $invoice->labour->sum('count')) }}</span>)
+									Lab.
+								</span>
+								=
+								${{ number_format( $jobInvoicesMaterialsSum + $jobInvoicesLabourSum, 2, '.', '' ) }}
 								<div class="btn-toolbar">
 									<form 	id="invoice-delete-{{ $invoice->id }}" 
 											method="POST"
@@ -182,90 +298,129 @@
 											enctype="multipart">
 										{{ csrf_field() }}
 									</form>
-									<form 	id="invoice-pay-{{ $invoice->id }}" 
+									<form 	id="invoice-toggle-pay-{{ $invoice->id }}" 
 											method="POST"
-											action="{{ route('jobs.invoices.pay', [$job->id, $invoice->id]) }}"
+											action="{{ route('jobs.invoices.togglePay', [$job->id, $invoice->id]) }}"
 											enctype="multipart">
 										{{ csrf_field() }}
 									</form>
-										<div class="btn-group btn-group-sm mr-2">
-											<a 	class="btn btn-outline-primary"
-												href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
-												Edit
-											</a>
-											<button 	data-toggle="modal"
-														type="button" 
-														data-target="#confirmModal"
-														data-titletext = "Delete Invoice"
-														data-formid="invoice-delete-{{ $invoice->id }}"
-														class="btn btn-sm btn-outline-danger">
-												<i class="fa fa-trash" aria-hidden="true"></i>
-												Delete
-											</button>
-										</div>
-										<div class="btn-group btn-group-sm">
-											@if ( $invoice->sent )
-											<button	class="btn btn-outline-success disabled" type="button">
+									<form 	id="invoice-toggle-send-{{ $invoice->id }}" 
+											method="POST"
+											action="{{ route('jobs.invoices.toggleSend', [$job->id, $invoice->id]) }}"
+											enctype="multipart">
+										{{ csrf_field() }}
+									</form>
+									<div class="btn-group btn-group-sm mr-2">
+										<a 	class="btn btn-outline-primary"
+											href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
+											Edit
+										</a>
+										<button 	data-toggle="modal"
+													type="button" 
+													data-target="#confirmModal"
+													data-titletext = "Delete Invoice"
+													data-formid="invoice-delete-{{ $invoice->id }}"
+													class="btn btn-sm btn-outline-danger">
+											Delete
+										</button>
+									</div>
+									<div class="btn-group btn-group-sm">
+										@if ( $invoice->sent )
+										<div class="btn-group btn-group-sm" role="group">
+											<button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												Sent
 											</button>
-											@else
-											<div class="btn-group btn-group-sm" role="group">
-												<button type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-													Unsent
+											<div class="dropdown-menu">
+											@if( !empty( $job->email ) )
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Email Detailed Invoice Again"
+															data-formid="invoice-send-{{ $invoice->id }}"
+															class="dropdown-item">
+													Email detailed breakdown again.
 												</button>
-												<div class="dropdown-menu">
-												@if( !empty( $job->email ) )
-													<button 	data-toggle="modal"
-																data-target="#confirmModal"
-																data-titletext = "Email Detailed Invoice"
-																data-formid="invoice-send-{{ $invoice->id }}"
-																class="dropdown-item">
-														Email with detailed breakdown.
-													</button>
-													<button 	data-toggle="modal"
-																data-target="#confirmModal"
-																data-titletext = "Email Summary Invoice"
-																data-formid="invoice-send-{{ $invoice->id }}"
-																class="dropdown-item">
-														Email with summary only.
-													</button>
-													<div class="dropdown-divider"></div>
-												@endif
-													<a 	class="dropdown-item" 
-														href="{{ route('jobs.invoices.print', [$job->id, $invoice->id]) }}"
-														target="_blank">
-														Print To Snail Mail Invoice
-													</a>
-													<button 	data-toggle="modal"
-																data-target="#confirmModal"
-																data-titletext = "Mark Mailed Invoice as Sent"
-																data-formid="invoice-send-{{ $invoice->id }}"
-																class="dropdown-item">
-														Mark mailed invoice as sent.
-													</button>
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Email Summary Invoice Again"
+															data-formid="invoice-send-{{ $invoice->id }}"
+															class="dropdown-item">
+													Email summary only again.
+												</button>
+												<div class="dropdown-divider"></div>
+											@endif
+												<a 	class="dropdown-item" 
+													href="{{ route('jobs.invoices.print', [$job->id, $invoice->id]) }}"
+													target="_blank">
+													Print Snail Mail Invoice
+												</a>
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Mark Mailed Invoice as Unsent"
+															data-formid="invoice-toggle-send-{{ $invoice->id }}"
+															class="dropdown-item">
+													Mark mailed invoice as unsent.
+												</button>
 
-												</div>
 											</div>
-											@endif
-											@if ( $invoice->paid )
-											<button 	data-toggle="modal"
-														data-target="#confirmModal"
-														data-titletext = "Mark Invoice as Unpaid"
-														data-formid="invoice-pay-{{ $invoice->id }}"
-														class="btn btn-outline-success disabled">
-												Paid
-											</button>
-											@else
-											<button 	data-toggle="modal"
-														data-target="#confirmModal"
-														data-titletext = "Mark Invoice as Paid"
-														data-formid="invoice-pay-{{ $invoice->id }}"
-														class="btn btn-outline-danger">
-												Unpaid
-											</button>
-											@endif
 										</div>
+										@else
+										<div class="btn-group btn-group-sm" role="group">
+											<button type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												Unsent
+											</button>
+											<div class="dropdown-menu">
+											@if( !empty( $job->email ) )
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Email Detailed Invoice"
+															data-formid="invoice-send-{{ $invoice->id }}"
+															class="dropdown-item">
+													Email with detailed breakdown.
+												</button>
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Email Summary Invoice"
+															data-formid="invoice-send-{{ $invoice->id }}"
+															class="dropdown-item">
+													Email with summary only.
+												</button>
+												<div class="dropdown-divider"></div>
+											@endif
+												<a 	class="dropdown-item" 
+													href="{{ route('jobs.invoices.print', [$job->id, $invoice->id]) }}"
+													target="_blank">
+													Print Snail Mail Invoice
+												</a>
+												<button 	data-toggle="modal"
+															data-target="#confirmModal"
+															data-titletext = "Mark Mailed Invoice as Sent"
+															data-formid="invoice-toggle-send-{{ $invoice->id }}"
+															class="dropdown-item">
+													Mark mailed invoice as sent.
+												</button>
 
+											</div>
+										</div>
+										@endif
+										@if ( $invoice->paid )
+										<button 	data-toggle="modal"
+													data-target="#confirmModal"
+													data-titletext = "Mark Invoice as Unpaid"
+													data-formid="invoice-toggle-pay-{{ $invoice->id }}"
+													class="btn btn-outline-success">
+											Paid
+										</button>
+										@else
+										<button 	data-toggle="modal"
+													data-target="#confirmModal"
+													data-titletext = "Mark Invoice as Paid"
+													data-formid="invoice-toggle-pay-{{ $invoice->id }}"
+													class="btn btn-outline-danger">
+											Unpaid
+										</button>
+										@endif
+									</div>
+								</div>
 							</li>
 						@endforeach
 						@if( $job->invoices->count() < 1 )

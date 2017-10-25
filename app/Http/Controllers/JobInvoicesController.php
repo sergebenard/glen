@@ -112,6 +112,8 @@ class JobInvoicesController extends Controller
 
     public function send( Job $job, Invoices $invoice, Request $request )
     {
+        //dump( 'Send function' );
+
         $invoice->sent = 1;
 
         $invoice->save();
@@ -121,11 +123,20 @@ class JobInvoicesController extends Controller
         return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
     }
 
-    public function pay( Job $job, Invoices $invoice, Request $request )
+    public function togglePay( Job $job, Invoices $invoice, Request $request )
     {
+        //dump( 'Toggle Pay' );
         $invoice->togglePaid()->save();
 
         $request->session()->flash('success', 'Successfully changed paid status for Job ' . $job->number . ' invoice.');
+        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+    }
+
+    public function toggleSend( Job $job, Invoices $invoice, Request $request )
+    {
+        $invoice->toggleSent()->save();
+
+        $request->session()->flash('success', 'Successfully changed sent status for Job ' . $job->number . ' invoice.');
         return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
     }
 

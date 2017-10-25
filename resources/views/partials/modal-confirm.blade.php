@@ -52,6 +52,10 @@
 					`);
 			}
 
+			/*console.log(	'titleText: ' + titleText,
+							'defaultTitleText: ' + defaultTitleText,
+							'formID: ' + formID);*/
+
 			var modal = $(this);
 			modal.find('.modal-title').text( titleText );
 			

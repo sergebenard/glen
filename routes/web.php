@@ -43,9 +43,10 @@ Route::resource(	'jobs/{job}/labour',
 						]
 					]);
 
+Route::post('jobs/{job}/invoices/{invoice}/toggle-send', 'JobInvoicesController@toggleSend')->name('jobs.invoices.toggleSend');
 Route::post('jobs/{job}/invoices/{invoice}/send', 'JobInvoicesController@send')->name('jobs.invoices.send');
 
-Route::post('jobs/{job}/invoices/{invoice}/pay', 'JobInvoicesController@pay')->name('jobs.invoices.pay');
+Route::post('jobs/{job}/invoices/{invoice}/toggle-pay', 'JobInvoicesController@togglePay')->name('jobs.invoices.togglePay');
 
 Route::get('jobs/{job}/invoices/{invoice}/print', 'JobInvoicesController@print')->name('jobs.invoices.print');
 
@@ -85,6 +86,51 @@ Route::resource(	'jobs/{job}/invoices/{invoice}/labour',
     						'edit' => 'jobs.invoices.labour.edit',
     						'update' => 'jobs.invoices.labour.update',
     						'destroy' => 'jobs.invoices.labour.destroy',
+						]
+					]);
+
+Route::post('jobs/{job}/proposals/{proposal}/toggle-send', 'JobProposalsController@toggleSend')->name('jobs.proposals.toggleSend');
+Route::post('jobs/{job}/proposals/{proposal}/send', 'JobProposalsController@send')->name('jobs.proposals.send');
+Route::get('jobs/{job}/proposals/{proposal}/change-status/{status}', 'JobProposalsController@changeStatus')->name('jobs.proposals.changeStatus');
+
+Route::get('jobs/{job}/proposals/{proposal}/print', 'JobProposalsController@print')->name('jobs.proposals.print');
+
+Route::resource(	'jobs/{job}/proposals',
+					'JobProposalsController',
+					['names' => [
+    						'index' => 'jobs.proposals.index',
+    						'create' => 'jobs.proposals.create',
+    						'store' => 'jobs.proposals.store',
+    						'show' => 'jobs.proposals.show',
+    						'edit' => 'jobs.proposals.edit',
+    						'update' => 'jobs.proposals.update',
+    						'destroy' => 'jobs.proposals.destroy',
+						]
+					]);
+
+Route::resource(	'jobs/{job}/proposals/{proposal}/materials',
+					'JobProposalsMaterialsController',
+					['names' => [
+    						'index' => 'jobs.proposals.materials.index',
+    						'create' => 'jobs.proposals.materials.create',
+    						'store' => 'jobs.proposals.materials.store',
+    						'show' => 'jobs.proposals.materials.show',
+    						'edit' => 'jobs.proposals.materials.edit',
+    						'update' => 'jobs.proposals.materials.update',
+    						'destroy' => 'jobs.proposals.materials.destroy',
+						]
+					]);
+
+Route::resource(	'jobs/{job}/proposals/{proposal}/labour',
+					'JobProposalsLabourController',
+					['names' => [
+    						'index' => 'jobs.proposals.labour.index',
+    						'create' => 'jobs.proposals.labour.create',
+    						'store' => 'jobs.proposals.labour.store',
+    						'show' => 'jobs.proposals.labour.show',
+    						'edit' => 'jobs.proposals.labour.edit',
+    						'update' => 'jobs.proposals.labour.update',
+    						'destroy' => 'jobs.proposals.labour.destroy',
 						]
 					]);
 
