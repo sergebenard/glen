@@ -31,7 +31,7 @@ class JobProposalsController extends Controller
             ]
         );
 
-        $request->session()->flash('success', 'Successfully created new empty Invoice.');
+        $request->session()->flash('success', 'Successfully created new empty Proposal.');
 
         /*dd( 'redirecting to route ' .route('jobs.invoices.edit', [ $job, 1 ]), 'invoice->id=' . $invoice->id );*/
 
@@ -118,7 +118,7 @@ class JobProposalsController extends Controller
 
         $proposal->save();
 
-        $request->session()->flash('success', 'Successfully sent invoice for Job ' . $proposal->job->number . '.');
+        $request->session()->flash('success', 'Successfully sent proposal for Job ' . $proposal->job->number . '.');
 
         return redirect( route('jobs.show', $job) . "#jobProposals" );
     }

@@ -128,26 +128,13 @@ class JobInvoicesController extends Controller
         return redirect( route('jobs.show', $job) . "#jobInvoices" );
     }
 
-    public function togglePay( Job $job, Invoices $invoice, Request $request )
+    public function togglePay( Int $job, Invoices $invoice, Request $request )
     {
         //dump( 'Toggle Pay' );
         $invoice->togglePaid()->save();
 
-        if ( $job->invoices->contains( [ 'paid' => 1 ] ) )
-        {
-            $job->finished = 1;
-
-            $job->save();
-        }
-        else
-        {
-            $job->finished = 0;
-
-            $job->save();
-        }
-
-        $request->session()->flash('success', 'Successfully changed paid status for Job ' . $job->number . ' invoice.');
-        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+        $request->session()->flash('success', 'Successfully changed paid status for Job ' . $invoice->job->number . ' invoice.');
+        return redirect( route('jobs.show', $job) . "#jobInvoices" );
     }
 
     public function toggleSend( Int $job, Invoices $invoice, Request $request )

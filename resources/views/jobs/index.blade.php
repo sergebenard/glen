@@ -31,10 +31,8 @@
 			<small class="text-muted">{{ $job->created_at->diffForHumans() }}</small>
 		</div>
 		@if( !empty( $job->note ) )
-		<div class="card-body">
-			<small>
-				<pre class="card-text text-muted">{{ $job->note }}</pre>
-			</small>
+		<div class="card-body text-muted text-truncate">
+			{!! nl2br( $job->note ) !!}
 		</div>
 		@endif
 		<ul class="list-group list-group-flush">
