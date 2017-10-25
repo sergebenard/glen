@@ -24,10 +24,10 @@ class JobInvoicesMaterialsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create( Job $job, Invoices $invoice )
+    public function create( Int $job, Invoices $invoice )
     {
         //
-        return view('jobs.invoices.materials.create', compact('job', 'invoice'));
+        return view('jobs.invoices.materials.create', compact('invoice'));
     }
 
     /**
@@ -36,7 +36,7 @@ class JobInvoicesMaterialsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Job $job, Invoices $invoice, Request $request)
+    public function store(Int $job, Int $invoice, Request $request)
     {
         //
         $request->validate([
@@ -52,7 +52,7 @@ class JobInvoicesMaterialsController extends Controller
         $material->name = $request->name;
         $material->description = $request->description;
         $material->cost = $request->cost;
-        $material->materialable_id = $invoice->id;
+        $material->materialable_id = $invoice;
         $material->materialable_type = 'App\Invoices';
         $material->subtotal = null;
 
@@ -60,7 +60,7 @@ class JobInvoicesMaterialsController extends Controller
 
         $request->session()->flash('success', "Successfully created new material on invoice." );
         /*dd( "Invoice ID: " . $invoice->id, "Route: " . route('jobs.invoices.show', [$job->id, $invoice->id]) );*/
-        return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
     }
 
     /**
@@ -80,10 +80,10 @@ class JobInvoicesMaterialsController extends Controller
      * @param  \App\Materials  $materials
      * @return \Illuminate\Http\Response
      */
-    public function edit(Job $job, Invoices $invoice, Materials $material)
+    public function edit(Int $job, Int $invoice, Materials $material)
     {
         //
-        return view('jobs.invoices.materials.edit', compact('job', 'invoice', 'material'));
+        return view('jobs.invoices.materials.edit', compact('material'));
     }
 
     /**
@@ -93,7 +93,7 @@ class JobInvoicesMaterialsController extends Controller
      * @param  \App\Materials  $materials
      * @return \Illuminate\Http\Response
      */
-    public function update(Job $job, Invoices $invoice, Request $request, Materials $material)
+    public function update(Int $job, Int $invoice, Request $request, Materials $material)
     {
         //
         //
@@ -120,7 +120,7 @@ class JobInvoicesMaterialsController extends Controller
 
         //dd( 'Route: ' . route('jobs.invoices.show', [$job->id, $invoice->id]) );
 
-        return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
     }
 
     /**
@@ -129,13 +129,13 @@ class JobInvoicesMaterialsController extends Controller
      * @param  \App\Materials  $materials
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job, Invoices $invoice, Materials $material, Request $request)
+    public function destroy(Int $job, Int $invoice, Materials $material, Request $request)
     {
         //
         $material->delete();
 
         $request->session()->flash('success', "Successfully deleted material from invoice.");
 
-        return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
     }
 }

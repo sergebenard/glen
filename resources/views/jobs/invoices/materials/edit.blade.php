@@ -6,14 +6,14 @@
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.index') }}">Jobs</a></li>
-		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $job->id) }}">{{ $job->number }}</a></li>
-		<li class="breadcrumb-item"><a href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">Invoice</a></li>
+		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $material->materialable->job->id) }}">{{ $material->materialable->job->number }}</a></li>
+		<li class="breadcrumb-item"><a href="{{ route('jobs.invoices.show', [$material->materialable->job->id, $material->materialable->id]) }}">Invoice</a></li>
 		<li class="breadcrumb-item active">Edit Material</li>
 	</ol>
 @endsection
 
 @section('page-content')
-	<form 	action="{{ route('jobs.invoices.materials.update', [$job->id, $invoice->id, $material->id]) }}"
+	<form 	action="{{ route('jobs.invoices.materials.update', [$material->materialable->job->id, $material->materialable->id, $material->id]) }}"
 			method="POST"
 			enctype="multipart/form-data">
 		{{ csrf_field() }}
@@ -93,14 +93,14 @@
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary" type="submit">Update</button>
-			<a class="btn btn-outline-primary" href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
+			<a class="btn btn-outline-primary" href="{{ route('jobs.invoices.show', [$material->materialable->job->id, $material->materialable->id]) }}">
 				Cancel
 			</a>
 		</div>
 	</form>
 	<form 	id="material-delete" 
 			method="POST"
-			action="{{ route('jobs.invoices.materials.destroy', [$job->id, $invoice->id, $material->id]) }}"
+			action="{{ route('jobs.invoices.materials.destroy', [$material->materialable->job->id, $material->materialable->id, $material->id]) }}"
 			enctype="multipart">
 		{{ csrf_field() }}
 		{{ method_field('DELETE') }}

@@ -16,7 +16,7 @@ class JobController extends Controller
 	public function index()
 	{
 		//
-		$jobs = Job::orderBy('created_at', 'DESC')->with('materials', 'labour')->get();
+		$jobs = Job::orderBy('created_at', 'DESC')->with(['materials', 'labour'])->get();
 
 		return view('jobs.index', compact('jobs'));
 	}
@@ -71,13 +71,17 @@ class JobController extends Controller
 	 * @param  \App\Job  $job
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Job $job)
+	public function show($job)
 	{
-		//
-		$job->with(	'materials',
-					'labour',
-					'invoices.materials',
-					'invoices.labour');
+		$job = Job::where( 'id', '=', $job )->
+					with(
+						'materials',
+						'labour',
+						'invoices.materials',
+						'invoices.labour',
+						'proposals.materials',
+						'proposals.labour'
+					)->first();
 
 		return view('jobs.show', compact('job'));
 	}

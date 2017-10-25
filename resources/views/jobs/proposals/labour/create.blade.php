@@ -6,14 +6,14 @@
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.index') }}">Jobs</a></li>
-		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $job->id) }}">{{ $job->number }}</a></li>
-		<li class="breadcrumb-item"><a href="{{ route('jobs.proposals.show', [$job->id, $proposal->id]) }}">Proposal</a></li>
+		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $proposal->job->id) }}">{{ $proposal->job->number }}</a></li>
+		<li class="breadcrumb-item"><a href="{{ route('jobs.proposals.show', [$proposal->job->id, $proposal->id]) }}">Proposal</a></li>
 		<li class="breadcrumb-item active">New Labour</li>
 	</ol>
 @endsection
 
 @section('page-content')
-	<form 	action="{{ route('jobs.proposals.labour.store', [$job->id, $proposal->id]) }}"
+	<form 	action="{{ route('jobs.proposals.labour.store', [$proposal->job->id, $proposal->id]) }}"
 			method="POST"
 			enctype="multipart/form-data">
 		{{ csrf_field() }}
@@ -74,7 +74,7 @@
 		</div>
 
 		<button class="btn btn-primary" type="submit">Save New</button>
-		<a class="btn btn-outline-primary" href="{{ route('jobs.proposals.show', [$job->id, $proposal->id]) }}">
+		<a class="btn btn-outline-primary" href="{{ route('jobs.proposals.show', [$proposal->job->id, $proposal->id]) }}">
 			Cancel
 		</a>
 	</form>

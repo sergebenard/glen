@@ -10,8 +10,8 @@
 		<div class="col-3">
 			<div class="align-bottom">
 				<p>
-					{{ $job->name }}<br>
-					{!! nl2br( $job->address ) !!}
+					{{ $invoice->job->name }}<br>
+					{!! nl2br( $invoice->job->address ) !!}
 				</p>
 			</div>
 		</div>

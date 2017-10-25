@@ -70,13 +70,21 @@ class Job extends Model
 		$this->attributes['name'] = ucwords( $value );
 	}
 
+	public function toggleFinished()
+	{
+		$this->finished = !$this->finished;
+
+		return $this;
+	}
 		/**
 	 * Formats US and CA phone number formats
 	 * @param  STRING $value Phone Number of Variable Length
 	 * @return STRING        Phone number in pleasant visual format
 	 */
-	public function formatPhoneNumber( $value )
+	public function formatPhoneNumber( $value = null )
 	{
+		$value = ( is_null( $value ) ) ? $value = $this->attributes['phone'] : $value;
+
 		$length = strlen($value);
 		switch($length)
 		{

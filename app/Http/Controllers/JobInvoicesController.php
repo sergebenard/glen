@@ -26,12 +26,12 @@ class JobInvoicesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create( Job $job, Request $request )
+    public function create( Int $job, Request $request )
     {
         //
 
         $invoice = Invoices::create( [
-                'job_id' => $job->id,
+                'job_id' => $job,
             ]
         );
 
@@ -59,14 +59,19 @@ class JobInvoicesController extends Controller
      * @param  \App\Invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job, Invoices $invoice)
+    public function show($job, Int $invoice)
     {
         //
-        $invoice->with( 'materials', 'labour' );
+        $invoice = Invoices::where('id', '=', $invoice)->
+                        with( 
+                            'job',
+                            'materials',
+                            'labour'
+                        )->first();
 
         /*dump( $invoice );*/
 
-        return view('jobs.invoices.show', compact('job', 'invoice'));
+        return view('jobs.invoices.show', compact('invoice'));
     }
 
     /**
@@ -98,19 +103,19 @@ class JobInvoicesController extends Controller
      * @param  \App\Invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job, Invoices $invoice, Request $request)
+    public function destroy(Int $job, Invoices $invoice, Request $request)
     {
         //
         $invoice->materials()->delete();
         $invoice->labour()->delete();
         $invoice->delete();
 
-        $request->session()->flash('success', 'Successfully deleted invoice from Job ' . $job->number .'.');
+        $request->session()->flash('success', 'Successfully deleted invoice from Job ' . $invoice->job->number .'.');
 
-        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+        return redirect( route('jobs.show', $job) . "#jobInvoices" );
     }
 
-    public function send( Job $job, Invoices $invoice, Request $request )
+    public function send( Int $job, Invoices $invoice, Request $request )
     {
         //dump( 'Send function' );
 
@@ -118,9 +123,9 @@ class JobInvoicesController extends Controller
 
         $invoice->save();
 
-        $request->session()->flash('success', 'Successfully sent invoice for Job ' . $job->number . '.');
+        $request->session()->flash('success', 'Successfully sent invoice for Job ' . $invoice->job->number . '.');
 
-        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+        return redirect( route('jobs.show', $job) . "#jobInvoices" );
     }
 
     public function togglePay( Job $job, Invoices $invoice, Request $request )
@@ -128,20 +133,33 @@ class JobInvoicesController extends Controller
         //dump( 'Toggle Pay' );
         $invoice->togglePaid()->save();
 
+        if ( $job->invoices->contains( [ 'paid' => 1 ] ) )
+        {
+            $job->finished = 1;
+
+            $job->save();
+        }
+        else
+        {
+            $job->finished = 0;
+
+            $job->save();
+        }
+
         $request->session()->flash('success', 'Successfully changed paid status for Job ' . $job->number . ' invoice.');
         return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
     }
 
-    public function toggleSend( Job $job, Invoices $invoice, Request $request )
+    public function toggleSend( Int $job, Invoices $invoice, Request $request )
     {
         $invoice->toggleSent()->save();
 
-        $request->session()->flash('success', 'Successfully changed sent status for Job ' . $job->number . ' invoice.');
-        return redirect( route('jobs.show', $job->id) . "#jobInvoices" );
+        $request->session()->flash('success', 'Successfully changed sent status for Job ' . $invoice->job->number . ' invoice.');
+        return redirect( route('jobs.show', $invoice->job->id) . "#jobInvoices" );
     }
 
-    public function print( Job $job, Invoices $invoice, Request $request )
+    public function print( Int $job, Invoices $invoice, Request $request )
     {
-        return view('jobs.invoices.printout', compact('job', 'invoice'));
+        return view('jobs.invoices.printout', compact('invoice'));
     }
 }

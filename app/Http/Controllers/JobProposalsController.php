@@ -23,13 +23,11 @@ class JobProposalsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create( Job $job, Request $request )
+    public function create( Int $job, Request $request )
     {
         //
-        //
-
         $proposal = Proposals::create( [
-                'job_id' => $job->id,
+                'job_id' => $job,
             ]
         );
 
@@ -57,14 +55,18 @@ class JobProposalsController extends Controller
      * @param  \App\Proposals  $proposals
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job, Proposals $proposal)
+    public function show(Int $job, Int $proposal)
     {
         //
-        $proposal->with( 'materials', 'labour' );
+        $proposal = Proposals::where('id', '=', $proposal)->
+                    with( 
+                        'job',
+                        'materials',
+                        'labour' )->first();
 
         /*dump( $proposal );*/
 
-        return view('jobs.proposals.show', compact('job', 'proposal'));
+        return view('jobs.proposals.show', compact('proposal'));
     }
 
     /**
@@ -96,19 +98,19 @@ class JobProposalsController extends Controller
      * @param  \App\Proposals  $proposals
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job, Proposals $proposals, Request $request)
+    public function destroy(Int $job, Proposals $proposal, Request $request)
     {
         //
         $proposal->materials()->delete();
         $proposal->labour()->delete();
         $proposal->delete();
 
-        $request->session()->flash('success', 'Successfully deleted proposal from Job ' . $job->number .'.');
+        $request->session()->flash('success', 'Successfully deleted proposal from Job ' . $proposal->job->number .'.');
 
-        return redirect( route('jobs.show', $job->id) . "#jobProposals" );
+        return redirect( route('jobs.show', $job) . "#jobProposals" );
     }
 
-    public function send( Job $job, Proposals $proposal, Request $request )
+    public function send( Int $job, Proposals $proposal, Request $request )
     {
         //dump( 'Send function' );
 
@@ -116,20 +118,20 @@ class JobProposalsController extends Controller
 
         $proposal->save();
 
-        $request->session()->flash('success', 'Successfully sent invoice for Job ' . $job->number . '.');
+        $request->session()->flash('success', 'Successfully sent invoice for Job ' . $proposal->job->number . '.');
 
-        return redirect( route('jobs.show', $job->id) . "#jobProposals" );
+        return redirect( route('jobs.show', $job) . "#jobProposals" );
     }
 
-    public function toggleSend( Job $job, Proposals $proposal, Request $request )
+    public function toggleSend( Int $job, Proposals $proposal, Request $request )
     {
         $proposal->toggleSent()->save();
 
-        $request->session()->flash('success', 'Successfully changed sent status for Job ' . $job->number . ' proposal.');
-        return redirect( route('jobs.show', $job->id) . "#jobProposals" );
+        $request->session()->flash('success', 'Successfully changed sent status for Job ' . $proposal->job->number . ' proposal.');
+        return redirect( route('jobs.show', $proposal->job->id) . "#jobProposals" );
     }
 
-    public function changeStatus( Job $job, Proposals $proposal, String $status, Request $request )
+    public function changeStatus( Int $job, Proposals $proposal, String $status, Request $request )
     {
         $allowed = [
             'approved',
@@ -145,11 +147,11 @@ class JobProposalsController extends Controller
 
             $request->session()->flash('success', 'Successfully changed proposal status to ' . $status .'.');
 
-            return redirect( route( 'jobs.show', $job->id ) );
+            return redirect( route( 'jobs.show', $proposal->job->id ) );
         }
     }
 
-    public function print( Job $job, Proposals $proposal, Request $request )
+    public function print( Int $job, Proposals $proposal, Request $request )
     {
         return view('jobs.proposals.printout', compact('job', 'proposal'));
     }

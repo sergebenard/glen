@@ -24,10 +24,10 @@ class JobProposalsLabourController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create( Job $job, Proposals $proposal)
+    public function create( Int $job, Proposals $proposal)
     {
         //
-        return view('jobs.proposals.labour.create', compact('job', 'proposal'));
+        return view('jobs.proposals.labour.create', compact('proposal'));
     }
 
     /**
@@ -36,7 +36,7 @@ class JobProposalsLabourController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store( Job $job, Proposals $proposal, Request $request)
+    public function store( Int $job, Int $proposal, Request $request)
     {
         //
         //
@@ -51,7 +51,7 @@ class JobProposalsLabourController extends Controller
         $labour->count = $request->count;
         $labour->description = $request->description;
         $labour->wage = $request->wage;
-        $labour->labourable_id = $proposal->id;
+        $labour->labourable_id = $proposal;
         $labour->labourable_type = 'App\Proposals';
         $labour->subtotal = null;
 
@@ -59,7 +59,7 @@ class JobProposalsLabourController extends Controller
 
         $request->session()->flash('success', "Successfully created new labour entry on proposal." );
 
-        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) );
+        return redirect( route('jobs.proposals.show', [$job, $proposal]) );
     }
 
     /**
@@ -79,10 +79,10 @@ class JobProposalsLabourController extends Controller
      * @param  \App\Labour  $labour
      * @return \Illuminate\Http\Response
      */
-    public function edit( Job $job, Proposals $proposal, Labour $labour)
+    public function edit( Int $job, Int $proposal, Labour $labour)
     {
         //
-        return view('jobs.proposals.labour.edit', compact( 'job', 'proposal', 'labour' ));
+        return view('jobs.proposals.labour.edit', compact( 'labour' ));
     }
 
     /**
@@ -92,7 +92,7 @@ class JobProposalsLabourController extends Controller
      * @param  \App\Labour  $labour
      * @return \Illuminate\Http\Response
      */
-    public function update( Job $job, Proposals $proposal, Request $request, Labour $labour)
+    public function update( Int $job, Int $proposal, Request $request, Labour $labour)
     {
         //
         $request->validate([
@@ -110,7 +110,7 @@ class JobProposalsLabourController extends Controller
 
         $request->session()->flash('success', "Successfully updated labour entry on proposal." );
 
-        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) );
+        return redirect( route('jobs.proposals.show', [$job, $proposal]) );
     }
 
     /**
@@ -119,13 +119,13 @@ class JobProposalsLabourController extends Controller
      * @param  \App\Labour  $labour
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Job $job, Proposals $proposal, Labour $labour, Request $request)
+    public function destroy( Int $job, Int $proposal, Labour $labour, Request $request)
     {
         //
         $labour->delete();
 
         $request->session()->flash('success', "Successfully deleted labour entry on proposal." );
 
-        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) );
+        return redirect( route('jobs.proposals.show', [$job, $proposal]) );
     }
 }

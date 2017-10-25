@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Job ' .$job->number .' Proposal')
+@section('page-title', 'Job ' .$proposal->job->number .' Proposal')
 
 @section('page-breadcrumbs')
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
 		<li class="breadcrumb-item"><a href="{{ route('jobs.index') }}">Jobs</a></li>
-		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $job->id) }}">{{ $job->number }}</a></li>
+		<li class="breadcrumb-item"><a href="{{ route('jobs.show', $proposal->job->id) }}">{{ $proposal->job->number }}</a></li>
 		<li class="breadcrumb-item active">Proposal</li>
 	</ol>
 @endsection
@@ -28,7 +28,7 @@
 								<td class="small text-right" scope="row">
 									<form 	method="POST"
 											id="material-{{ $material->id }}"
-											action="{{ route('jobs.proposals.materials.destroy', [ $job->id, $proposal->id, $material->id ]) }}"
+											action="{{ route('jobs.proposals.materials.destroy', [ $proposal->job->id, $proposal->id, $material->id ]) }}"
 											enctype="multipart/data">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
@@ -46,7 +46,7 @@
 									{{ $material->count }}
 								</td>
 								<td class="small">
-									<a 	href="{{ route('jobs.proposals.materials.edit', [$job->id, $proposal->id, $material->id]) }}">
+									<a 	href="{{ route('jobs.proposals.materials.edit', [$proposal->job->id, $proposal->id, $material->id]) }}">
 										{{ $material->name }}
 									</a>
 								</td>
@@ -86,7 +86,7 @@
 					</table>
 					<div class="card-footer">
 						<a 	class="btn btn-outline-primary btn-block" 
-							href="{{ route('jobs.proposals.materials.create', [$job->id, $proposal->id] ) }}">
+							href="{{ route('jobs.proposals.materials.create', [$proposal->job->id, $proposal->id] ) }}">
 							New
 						</a>
 					</div>
@@ -107,7 +107,7 @@
 								<td class="small text-right" scope="row">
 									<form 	method="POST"
 											id="labour-{{ $labour->id }}"
-											action="{{ route('jobs.proposals.labour.destroy', [ $job->id, $proposal->id, $labour->id ]) }}"
+											action="{{ route('jobs.proposals.labour.destroy', [ $proposal->job->id, $proposal->id, $labour->id ]) }}"
 											enctype="multipart/data">
 										{{ csrf_field() }}
 										{{ method_field('DELETE') }}
@@ -125,7 +125,7 @@
 									{{ $labour->count }}&nbsp;<sup>/{{ str_plural( 'hr', $labour->count ) }}</sup>
 								</td>
 								<td class="small">
-									<a href="{{ route('jobs.proposals.labour.edit', [$job->id, $proposal->id, $labour->id]) }}">
+									<a href="{{ route('jobs.proposals.labour.edit', [$proposal->job->id, $proposal->id, $labour->id]) }}">
 										{{ $labour->description }}
 									</a>
 								</td>
@@ -162,7 +162,7 @@
 					</table>
 					<div class="card-footer">
 						<a 	class="btn btn-outline-primary btn-block" 
-							href="{{ route('jobs.proposals.labour.create', [$job->id, $proposal->id]) }}">
+							href="{{ route('jobs.proposals.labour.create', [$proposal->job->id, $proposal->id]) }}">
 							New
 						</a>
 					</div>

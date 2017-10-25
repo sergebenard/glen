@@ -24,10 +24,10 @@ class JobInvoicesLabourController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create( Job $job, Invoices $invoice )
+    public function create( Int $job, Invoices $invoice )
     {
         //
-        return view('jobs.invoices.labour.create', compact('job', 'invoice'));
+        return view('jobs.invoices.labour.create', compact('invoice'));
     }
 
     /**
@@ -36,7 +36,7 @@ class JobInvoicesLabourController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Job $job, Invoices $invoice, Request $request)
+    public function store(Int $job, Int $invoice, Request $request)
     {
         //
         $request->validate([
@@ -50,7 +50,7 @@ class JobInvoicesLabourController extends Controller
         $labour->count = $request->count;
         $labour->description = $request->description;
         $labour->wage = $request->wage;
-        $labour->labourable_id = $invoice->id;
+        $labour->labourable_id = $invoice;
         $labour->labourable_type = 'App\Invoices';
         $labour->subtotal = null;
 
@@ -58,7 +58,7 @@ class JobInvoicesLabourController extends Controller
 
         $request->session()->flash('success', "Successfully created new labour entry on invoice." );
 
-        return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
     }
 
     /**
@@ -78,10 +78,10 @@ class JobInvoicesLabourController extends Controller
      * @param  \App\Labour  $labour
      * @return \Illuminate\Http\Response
      */
-    public function edit(Job $job, Invoices $invoice, Labour $labour)
+    public function edit(Int $job, Int $invoice, Labour $labour)
     {
         //
-        return view('jobs.invoices.labour.edit', compact( 'job', 'invoice', 'labour' ));
+        return view('jobs.invoices.labour.edit', compact( 'labour' ));
     }
 
     /**
@@ -91,7 +91,7 @@ class JobInvoicesLabourController extends Controller
      * @param  \App\Labour  $labour
      * @return \Illuminate\Http\Response
      */
-    public function update(Job $job, Invoices $invoice, Request $request, Labour $labour)
+    public function update(Int $job, Int $invoice, Request $request, Labour $labour)
     {
         //
         $request->validate([
@@ -109,7 +109,7 @@ class JobInvoicesLabourController extends Controller
 
         $request->session()->flash('success', "Successfully updated labour entry on invoice." );
 
-        return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
     }
 
     /**
@@ -118,13 +118,13 @@ class JobInvoicesLabourController extends Controller
      * @param  \App\Labour  $labour
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job, Invoices $invoice, Labour $labour, Request $request)
+    public function destroy(Int $job, Int $invoice, Labour $labour, Request $request)
     {
         //
         $labour->delete();
 
         $request->session()->flash('success', "Successfully deleted labour entry on invoice." );
 
-        return redirect( route('jobs.invoices.show', [$job->id, $invoice->id]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
     }
 }

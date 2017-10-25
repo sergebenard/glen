@@ -161,7 +161,7 @@
 									<div class="btn-group btn-group-sm mr-2">
 										<a 	class="btn btn-outline-primary"
 											href="{{ route('jobs.proposals.show', [$job->id, $proposal->id]) }}">
-											Edit
+											<i class="fa fa-pencil" aria-hidden="true" aria-label="Edit"></i>
 										</a>
 										<button 	data-toggle="modal"
 													type="button" 
@@ -169,7 +169,7 @@
 													data-titletext = "Delete Invoice"
 													data-formid="invoice-delete-{{ $proposal->id }}"
 													class="btn btn-sm btn-outline-danger">
-											Delete
+											<i class="fa fa-trash" aria-hidden="true" aria-label="Delete"></i>
 										</button>
 									</div>
 									<div class="btn-group btn-group-sm">
