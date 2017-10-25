@@ -37,7 +37,7 @@
 					@endif
 					@if( !empty( $job->address ) )
 					<li class="list-group-item">
-						<a href="https://maps.google.com?q={{ urlencode( $job->address ) }}" rel="noreferrer" rel="noopener" target="_blank">
+						<a href="https://maps.google.com?q={{ urlencode( $job->address ) }}" target="_blank">
 							{{ $job->address }}
 						</a>
 					</li>

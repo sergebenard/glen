@@ -143,6 +143,14 @@ class JobController extends Controller
             $invoice->delete();
         }
 
+        foreach( $job->proposals as $proposal )
+        {
+        	$proposal->materials()->delete();
+        	$proposal->labour()->delete();
+
+        	$proposal->delete();
+        }
+
         $job->materials()->delete();
         $job->labour()->delete();
 
