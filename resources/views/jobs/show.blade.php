@@ -246,6 +246,11 @@
 								</div>
 							</li>
 						@endforeach
+						@if( $job->proposals->count() < 1 )
+							<li class="list-group-item text-center">
+								No proposals.
+							</li>
+						@endif
 						</ul>
 						<div class="card-footer">
 							<a 	class="btn btn-outline-primary btn-block" 
@@ -424,7 +429,7 @@
 							</li>
 						@endforeach
 						@if( $job->invoices->count() < 1 )
-							<li class="list-group-item">
+							<li class="list-group-item text-center">
 								No Invoices.
 							</li>
 						@endif
