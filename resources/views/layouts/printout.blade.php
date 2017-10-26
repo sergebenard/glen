@@ -5,15 +5,35 @@
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=612, shrink-to-fit=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+        <style type="text/css">
+            body {
+              background: rgb(204,204,204); 
+            }
+            page {
+              background: white;
+              display: block;
+              margin: 1cm auto;
+              padding: 1cm;
+              margin-bottom: 0.5cm;
+              box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+            }
+            page[size="A4"] {  
+              width: 21cm;
+              height: 29.7cm; 
+            }
+        </style>
     </head>
     <body>
         <div class="container">
-            <h1 class="display-3">@yield('page-title')</h1>
-            @yield('page-content')
+            @yield('page-controls')
+            <page size=A4>
+                @yield('page-content')
+            </page>
         </div><!-- /.container -->
 
         <!-- jQuery first, then Popper, then Bootstrap JS. -->

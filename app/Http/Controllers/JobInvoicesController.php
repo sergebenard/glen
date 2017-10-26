@@ -147,6 +147,6 @@ class JobInvoicesController extends Controller
 
     public function print( Int $job, Invoices $invoice, Request $request )
     {
-        return view('jobs.invoices.printout', compact('invoice'));
+        return view('jobs.invoices.printout', compact('invoice', 'request'));
     }
 }

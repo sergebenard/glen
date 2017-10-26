@@ -49,6 +49,7 @@ Route::post('jobs/{job}/invoices/{invoice}/send', 'JobInvoicesController@send')-
 Route::get('jobs/{job}/invoices/{invoice}/toggle-pay', 'JobInvoicesController@togglePay')->name('jobs.invoices.togglePay');
 
 Route::get('jobs/{job}/invoices/{invoice}/print', 'JobInvoicesController@print')->name('jobs.invoices.print');
+Route::post('jobs/{job}/invoices/{invoice}/print', 'JobInvoicesController@print')->name('jobs.invoices.print');
 
 Route::resource(	'jobs/{job}/invoices',
 					'JobInvoicesController',
