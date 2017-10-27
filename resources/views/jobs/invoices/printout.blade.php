@@ -5,7 +5,7 @@
 @section('page-controls')
 	<div class="alert alert-info d-print-none">
 		<h4>
-			This box will not be printed out.
+			This box will not be printed.
 		</h4>
 		<form method="POST" action="">
 			{{ csrf_field() }}
@@ -13,7 +13,7 @@
 				<label class="form-check-label custom-control custom-checkbox">
 					<input 	type="checkbox"
 							name="materialDetails"
-							value="details" {{ isset( $request->materialDetails ) && $request->materialDetails == 'details' ? 'checked' : '' }}
+							value="details" {{ $request->input('materialDetails') ? 'checked' : '' }}
 							class="custom-control-input">
 					<span class="custom-control-indicator"></span>
 					<div class="custom-control-description">
@@ -25,7 +25,7 @@
 				<label class="form-check-label custom-control custom-checkbox">
 					<input 	type="checkbox"
 							name="labourDetails"
-							value="details" {{ isset( $request->labourDetails ) && $request->labourDetails == 'details' ? 'checked' : '' }}
+							value="details" {{ $request->input('labourDetails') ? 'checked' : '' }}
 							class="custom-control-input">
 					<span class="custom-control-indicator"></span>
 					<div class="custom-control-description">
@@ -85,10 +85,10 @@
 						Description
 					</th>
 					<th class="text-right">
-						Cost
+						{{ $request->input('materialDetails') ? 'Cost' : '' }}
 					</th>
 					<th class="table-active text-right">
-						Sub
+						{{ $request->input('materialDetails') ? 'Sub' : '' }}
 					</th>
 				</tr>
 			</thead>
@@ -106,14 +106,14 @@
 							{{ $material->description }}
 						</td>
 						<td class="text-right">
-							@if( !empty( $material->cost ) )
+						@if( !empty( $material->cost ) && $request->input('materialDetails') )
 							@&nbsp;${{ $material->cost }}
-							@endif
+						@endif
 						</td>
 						<th class="text-right table-active">
-							@if( !empty( $material->cost ) )
+						@if( !empty( $material->cost ) && $request->input('materialDetails') )
 							${{ $material->subtotal }}
-							@endif
+						@endif
 						</th>
 					</tr>
 					@endforeach
@@ -149,10 +149,10 @@
 						Description
 					</th>
 					<th class="text-right">
-						Cost
+						{{ $request->input('labourDetails') ? 'Cost' : ''}}
 					</th>
 					<th class="table-active text-right">
-						Sub
+						{{ $request->input('labourDetails') ? 'Sub' : ''}}
 					</th>
 				</tr>
 			</thead>
@@ -167,12 +167,12 @@
 						{{ $labour->description }}
 					</td>
 					<td class="text-right">
-					@if( !empty($labour->wage) )
+					@if( !empty($labour->wage) && $request->input('labourDetails') )
 						${{ $labour->wage }}
 					@endif
 					</td>
 					<th class="text-right table-active">
-					@if( !empty($labour->wage) )
+					@if( !empty($labour->wage) && $request->input('labourDetails') )
 						${{ $labour->subtotal }}
 					@endif
 					</th>
