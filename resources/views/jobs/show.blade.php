@@ -270,19 +270,7 @@
 						</div>
 						<ul class="list-group list-group-flush">
 						@foreach( $job->invoices as $invoice )
-							@php
-							$listGroupBackground = 'list-group-item-warning';
-							switch( strtolower($invoice->status) )	{
-								case 'approved':
-									$listGroupBackground = 'list-group-item-success';
-									break;
-								case 'refused':
-									$listGroupBackground = 'list-group-item-danger';
-									break;
-							}
-
-							@endphp
-							<li class="list-group-item {{ $listGroupBackground }}">
+							<li class="list-group-item {{ $invoice->paid ? 'list-group-item-success' : 'list-group-item-warning' }}">
 								<div class="list-group-item-heading h5">
 									<a 	href="{{ route('jobs.invoices.show', [$job->id, $invoice->id]) }}">
 										Invoice {{ $loop->iteration }}
