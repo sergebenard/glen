@@ -12,6 +12,52 @@
 @endsection
 
 @section('page-content')
+		<div class="card mb-3">
+			<div class="card-header">
+				<h3>
+					Scope of Work
+				</h3>
+			</div>
+			<ul class="list-group">
+			@foreach( $proposal->scopes as $scope )
+				<li class="list-group-item">
+					<form 	method="POST"
+							id="scope-{{ $scope->id }}"
+							action="{{ route('jobs.proposals.scopes.destroy', [ $proposal->job->id, $proposal->id, $scope->id ]) }}"
+							enctype="multipart/data">
+						{{ csrf_field() }}
+						{{ method_field('DELETE') }}
+					</form>
+					<button 	data-toggle="modal"
+								type="button" 
+								data-target="#confirmModal"
+								data-titletext = "Delete Scope"
+								data-formid="scope-{{ $scope->id }}"
+								class="btn btn-outline-danger p-0 px-1 mr-4 float-left">
+						<span class="fa fa-trash" aria-hidden="true" aria-label="Delete"></span>
+					</button>
+					<ol start="{{ $loop->iteration }}">
+						<li>
+							<a href="{{ route('jobs.proposals.scopes.edit', [$proposal->job->id, $proposal->id, $scope->id]) }}">
+								{{ $scope->description }}
+							</a>
+						</li>
+					</ol>
+				</li>
+			@endforeach
+			@if( $proposal->scopes->count() < 1 )
+				<li class="list-group-item">
+					No Scope of Work Items.
+				</li>
+			@endif
+			</ul><!-- /.list-group -->
+			<div class="card-footer">
+				<a 	href="{{ route('jobs.proposals.scopes.create', [$proposal->job->id, $proposal->id]) }}"
+					class="btn btn-outline-primary btn-block">
+					New
+				</a>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="card">
@@ -92,7 +138,7 @@
 					</div>
 				</div>
 			</div>
-			<div class=" col-lg-6">
+			<div class="col-lg-6">
 				<div class="card">
 					<div class="card-header">
 						<h3>

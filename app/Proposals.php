@@ -26,6 +26,17 @@ class Proposals extends Model
     	return $this->belongsTo( Job::class );
     }
 
+    /**
+     * Proposals has many Scopes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function scopes()
+    {
+        // hasMany(RelatedModel, foreignKeyOnRelatedModel = proposals_id, localKey = id)
+        return $this->hasMany(Scopes::class);
+    }
+
     public function toggleSent()
     {
         $this->sent = !$this->sent;

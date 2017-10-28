@@ -96,6 +96,19 @@ Route::get('jobs/{job}/proposals/{proposal}/change-status/{status}', 'JobProposa
 
 Route::get('jobs/{job}/proposals/{proposal}/print', 'JobProposalsController@print')->name('jobs.proposals.print');
 
+Route::resource(    'jobs/{job}/proposals/{proposal}/scopes',
+                    'JobProposalsScopesController',
+                    ['names' => [
+                            'index' => 'jobs.proposals.scopes.index',
+                            'create' => 'jobs.proposals.scopes.create',
+                            'store' => 'jobs.proposals.scopes.store',
+                            'show' => 'jobs.proposals.scopes.show',
+                            'edit' => 'jobs.proposals.scopes.edit',
+                            'update' => 'jobs.proposals.scopes.update',
+                            'destroy' => 'jobs.proposals.scopes.destroy',
+                        ]
+                    ]);
+
 Route::resource(	'jobs/{job}/proposals',
 					'JobProposalsController',
 					['names' => [
