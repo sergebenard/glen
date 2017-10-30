@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDeadlineColumnToJobsTable extends Migration
+class DropFinishedColumnFromJobsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class AddDeadlineColumnToJobsTable extends Migration
     {
         Schema::table('jobs', function (Blueprint $table) {
             //
-            $table->timestamp('deadline')->nullable();
+            $table->dropColumn('finished');
         });
     }
 

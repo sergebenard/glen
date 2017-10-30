@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Job;
+use App\Invoices;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +25,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $unfinished = Job::orderBy('created_at', 'DESC')->
+                        where('finished', '=', null)->
+                        get();
+        $unpaid = Invoices::orderBy('created_at', 'DESC')->
+                        where('paid', '<', 1)->
+                        with('job', 'materials', 'labour')->
+                        get();
+        return view('home', compact('unfinished', 'unpaid'));
     }
 
     public function calculator()
