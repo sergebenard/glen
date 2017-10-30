@@ -2,6 +2,10 @@
 
 @section('page-title', 'Create Job')
 
+@section('page-head')
+<link rel="stylesheet" type="text/css" href="{{ url('/css/bootstrap-datepicker.standalone.min.css') }}">
+@stop
+
 @section('page-breadcrumbs')
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
@@ -16,8 +20,22 @@
 			enctype="multipart/form-data">
 		{{ csrf_field() }}
 		<div class="form-group">
-			<label 	for="jobName" 
-					{{ $errors->has('name') ? 'text-danger' :'' }}>
+			<label for="jobDeadline">
+				Deadline
+			</label>
+			<input 	type="date"
+					name="deadline"
+					id="jobDeadline"
+					autocomplete="off"
+					class="form-control"
+					min="{{ date('Y-m-d', time() - 60 * 60 * 24) }}">
+			<small class="form-text {{ $errors->has('name') ? 'invalid-feedback' :'' }}">
+				Optional.
+			</small>
+		</div>
+
+		<div class="form-group">
+			<label 	for="jobName">
 				Client Name
 			</label>
 			<input 	type="text"
@@ -28,6 +46,22 @@
 					autocomplete="off">
 			<small class="form-text {{ $errors->has('name') ? 'invalid-feedback' :'' }}">
 				Optional. Between 2 to 50 characters.
+			</small>
+		</div>
+
+		<div class="form-group">
+			<label 	for="jobAddress"
+					{{ $errors->has('address') ? 'text-danger' :'' }}>
+				Address
+			</label>
+			<textarea
+					name="address"
+					class="form-control {{ $errors->has('address') ? 'is-invalid' :'' }}"
+					id="jobAddress"
+					autocomplete="off"
+					required>{{ old('address') }}</textarea>
+			<small class="form-text {{ $errors->has('address') ? 'invalid-feedback' :'' }}">
+				Required.
 			</small>
 		</div>
 
@@ -44,22 +78,6 @@
 					autocomplete="off">
 			<small class="form-text {{ $errors->has('email') ? 'invalid-feedback' :'' }}">
 				Optional.
-			</small>
-		</div>
-
-		<div class="form-group">
-			<label 	for="jobAddress" 
-					{{ $errors->has('address') ? 'text-danger' :'' }}>
-				Address
-			</label>
-			<textarea
-					name="address"
-					class="form-control {{ $errors->has('address') ? 'is-invalid' :'' }}"
-					id="jobAddress"
-					autocomplete="off"
-					required>{{ old('address') }}</textarea>
-			<small class="form-text {{ $errors->has('address') ? 'invalid-feedback' :'' }}">
-				Required.
 			</small>
 		</div>
 
@@ -115,4 +133,28 @@
 			Cancel
 		</a>
 	</form>
+@stop
+
+@section('page-script')
+<script type="text/javascript" src="{{ url('/js/bootstrap-datepicker.min.js') }}"></script>
+<script type="text/javascript">
+	$( function() {
+		var deadlineTestText = 'Testing Date';
+
+		$('#jobDeadline').val( deadlineTestText );
+
+		if( deadlineTestText === $('#jobDeadline').val() )
+		{
+			$('#jobDeadline').datepicker();
+		}
+		else
+		{
+			console.log('The above warning is expected; it is caused by a test to see if the date field is supported by your browser.');
+		}
+
+		$('#jobDeadline').val( '{{ old('deadline') }}' );
+
+	} );
+</script>
+
 @stop

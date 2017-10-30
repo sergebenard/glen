@@ -25,7 +25,15 @@ class Job extends Model
 		'email',
 		'extension',
 		'note',
-		'finished'
+		'finished',
+		'deadline'
+	];
+
+	protected $dates = [
+		'created_at',
+		'updated_at',
+		'finished',
+		'deadline',
 	];
 
 	public function materials()
@@ -51,12 +59,12 @@ class Job extends Model
 	//
 	public function scopeUnfinished( $query )
 	{
-		return $query->where('finished', '<', 1);
+		return $query->where('finished', '=', null);
 	}
 
 	public function scopeFinished( $query )
 	{
-		return $query->where('finished', '>', 0);
+		return $query->where('finished', '!=', null);
 	}
 
 	public function setPhoneAttribute( $value )
@@ -68,6 +76,21 @@ class Job extends Model
 	public Function setNameAttribute( $value )
 	{
 		$this->attributes['name'] = ucwords( $value );
+	}
+
+	public function setDeadlineAttribute( $value )
+	{
+		$this->attributes['deadline'] = $value;
+
+		if ( $value !== null )
+		{
+			$this->attributes['deadline'] = date( 'Y-m-d 23:59:59', strtotime($value) );
+		}
+	}
+
+	public function isLate()
+	{
+		return ( $this->deadline !== null && $this->finished === null && $this->deadline->isPast()) ? true : false;
 	}
 
 	public function toggleFinished()

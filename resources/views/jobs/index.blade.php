@@ -21,14 +21,33 @@
 	@endempty
 
 	@foreach( $jobs as $job )
-	<div class="card my-3">
+	<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 		<div class="card-header">
 			<div class="h4 mb-1">
 				<a href="{{ route('jobs.show', $job->id) }}">
 					{{ $job->number }}
 				</a>
 			</div>
-			<small class="text-muted">{{ $job->created_at->diffForHumans() }}</small>
+			<small class="text-muted">
+				Created:
+					{{ $job->created_at->diffForHumans() }}
+			</small>
+			<br>
+			<small class="{{ ($job->isLate()) ? 'text-danger' : 'text-muted' }}">
+				@if( $job->deadline !== null )
+					Deadline: {{ $job->deadline->diffForHumans() }}
+				@else
+					No deadline specified.
+				@endif
+			</small>
+			<br>
+			<small class="text-muted">
+				@if( $job->finished !== null )
+					Finished: {{ $job->finished->diffForHumans() }}
+				@else
+					Not finished.
+				@endif
+			</small>
 		</div>
 		@if( !empty( $job->note ) )
 		<div class="card-body text-muted text-truncate">
@@ -65,7 +84,6 @@
 				</a>
 			</li>
 			@endif
-			<li class="list-group-item">{{ ($job->finished ? 'Finished' : 'Not Finished') }}</li>
 		</ul>
 		<div class="card-footer">
 			<a class="btn btn-outline-primary" href="{{ route( 'jobs.edit', $job->id ) }}">

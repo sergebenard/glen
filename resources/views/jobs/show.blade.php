@@ -13,16 +13,35 @@
 @section('page-content')
 	<div class="row">
 		<div class="col-md-8">
-			<div class="card my-3">
+			<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 				<a href="https://maps.google.com?q={{ urlencode( $job->address ) }}" target="_blank">
 				<img 	class="card-img-top"
 						src="https://maps.googleapis.com/maps/api/staticmap?size=512x512&scale=2&maptype=roadmap\&markers=size:mid%7Ccolor:red%7C{{ urlencode( $job->address ) }}&key=AIzaSyC3uTBSLuDdTdq_XSYPXhNR5Y1EwiPClFw" alt="Address">
 				</a>
-				<div class="card-header">
-					<div class="h4 mb-1">
+				<div class="card-header {{ ($job->isLate()) ? 'text-danger' : '' }}">
+					<div class="card-title h4 mb-1">
 						{{ $job->number }}
 					</div>
-					<small class="text-muted">{{ $job->created_at->diffForHumans() }}</small>
+					<small class="text-muted">
+						Created:
+							{{ $job->created_at->diffForHumans() }}
+					</small>
+					<br>
+					<small class="{{ ($job->isLate()) ? 'text-danger' : 'text-muted' }}">
+						@if( $job->deadline !== null )
+							Deadline: {{ $job->deadline->diffForHumans() }}
+						@else
+							No deadline specified.
+						@endif
+					</small>
+					<br>
+					<small class="text-muted">
+						@if( $job->finished !== null )
+							Finished: {{ $job->finished->diffForHumans() }}
+						@else
+							Not finished.
+						@endif
+					</small>
 				</div>
 				@if( !empty( $job->note ) )
 				<div class="card-body text-muted">
@@ -59,7 +78,6 @@
 						</a>
 					</li>
 					@endif
-					<li class="list-group-item">{{ ($job->finished ? 'Finished' : 'Not Finished') }}</li>
 				</ul>
 				<div class="card-footer">
 					<a class="btn btn-outline-primary" href="{{ route( 'jobs.edit', $job->id ) }}">
@@ -88,7 +106,7 @@
 		<div class="col-md-4">
 			<div class="row">
 				<div class="col-12">
-					<div class="card my-3">
+					<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 						<div class="card-header">
 							<a name="jobProposals"></a>
 							<div class="h5 mb-1">
@@ -261,7 +279,7 @@
 			</div>
 			<div class="row">
 				<div class="col-12">
-					<div class="card my-3">
+					<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 						<div class="card-header">
 							<a name="jobInvoices"></a>
 							<div class="h5 mb-1">
@@ -418,7 +436,7 @@
 
 			<div class="row">
 				<div class="col-12">
-					<div class="card my-3">
+					<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 						<div class="card-header">
 							<a name="jobActual"></a>
 							<div class="h5 mb-1">

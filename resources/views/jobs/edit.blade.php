@@ -2,6 +2,10 @@
 
 @section('page-title', 'Edit Job')
 
+@section('page-head')
+<link rel="stylesheet" type="text/css" href="{{ url('/css/bootstrap-datepicker.standalone.min.css') }}">
+@stop
+
 @section('page-breadcrumbs')
 	<ol class="breadcrumb my-2">
 		<li class="breadcrumb-item"><a href="{{ route('home') }}">Admin Home</a></li>
@@ -16,6 +20,20 @@
 			enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{ method_field( 'PATCH' ) }}
+		<div class="form-group">
+			<label for="jobDeadline">
+				Deadline
+			</label>
+			<input 	type="date"
+					name="deadline"
+					id="jobDeadline"
+					autocomplete="off"
+					class="form-control">
+			<small class="form-text {{ $errors->has('name') ? 'invalid-feedback' :'' }}">
+				Optional.
+			</small>
+		</div>
+
 		<div class="form-group">
 			<label 	for="jobName" 
 					{{ $errors->has('name') ? 'text-danger' :'' }}>
@@ -116,4 +134,30 @@
 			Cancel
 		</a>
 	</form>
+@stop
+
+@section('page-script')
+<script type="text/javascript" src="{{ url('/js/bootstrap-datepicker.min.js') }}"></script>
+<script type="text/javascript">
+	$( function() {
+		var deadlineTestText = 'Testing Date';
+
+		$('#jobDeadline').val( deadlineTestText );
+
+		if( deadlineTestText === $('#jobDeadline').val() )
+		{
+			$('#jobDeadline').datepicker({
+					format: 'dd/mm/yyyy',
+			});
+		}
+		else
+		{
+			console.log('The above warning is expected; it is caused by a test to see if the date field is supported by your browser.');
+		}
+
+		$('#jobDeadline').val( '{{ old('deadline', ( $job->deadline !== null ) ? date( 'Y-m-d', strtotime( $job->deadline ) ) : '' ) }}' )
+
+	} );
+</script>
+
 @stop

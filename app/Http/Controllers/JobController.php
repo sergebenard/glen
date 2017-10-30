@@ -46,6 +46,7 @@ class JobController extends Controller
 			'address' => 'required|min:2',
 			'phone' => 'nullable|min:10|max:15',
 			'note' =>	'nullable|min:2',
+			'deadline' => 'nullable|date'
 		]);
 		//
 		$job =Job::create(
@@ -57,6 +58,7 @@ class JobController extends Controller
 				'extension' => $request->extension,
 				'email' => $request->email,
 				'note' => $request->note,
+				'deadline' => ( $request->deadline !== null ) ? $request->deadline : null,
 			]
 		);
 
@@ -114,6 +116,7 @@ class JobController extends Controller
 			'address' => 'required|min:2',
 			'phone' => 'nullable|min:10|max:15',
 			'note' =>	'nullable|min:2',
+			'deadline' => 'nullable|date',
 		]);
 
 		$job->name = $request->name;
@@ -122,6 +125,7 @@ class JobController extends Controller
 		$job->phone = $request->phone;
 		$job->extension = $request->extension;
 		$job->note = $request->note;
+		$job->deadline = ( $request->deadline !== null ) ? $request->deadline : null;
 
 		$job->save();
 

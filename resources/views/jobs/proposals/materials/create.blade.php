@@ -44,7 +44,7 @@
 						</span>
 					</div>
 					<div class="card-text">
-						Sheets: 
+						Sheets:
 						<span id="soffitSheetsResult">
 							0
 						</span>
