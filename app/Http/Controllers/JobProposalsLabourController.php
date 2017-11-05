@@ -59,7 +59,7 @@ class JobProposalsLabourController extends Controller
 
         $request->session()->flash('success', "Successfully created new labour entry on proposal." );
 
-        return redirect( route('jobs.proposals.show', [$job, $proposal]) );
+        return redirect( route('jobs.proposals.show', [$job, $proposal]) . '#proposals' );
     }
 
     /**
@@ -110,7 +110,7 @@ class JobProposalsLabourController extends Controller
 
         $request->session()->flash('success', "Successfully updated labour entry on proposal." );
 
-        return redirect( route('jobs.proposals.show', [$job, $proposal]) );
+        return redirect( route('jobs.proposals.show', [$job, $proposal]) . '#proposals' );
     }
 
     /**
@@ -126,6 +126,6 @@ class JobProposalsLabourController extends Controller
 
         $request->session()->flash('success', "Successfully deleted labour entry on proposal." );
 
-        return redirect( route('jobs.proposals.show', [$job, $proposal]) );
+        return redirect( route('jobs.proposals.show', [$job, $proposal]) . '#proposals' );
     }
 }

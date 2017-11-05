@@ -68,7 +68,7 @@ class JobProposalsScopesController extends Controller
 			$request->session()->flash('success', 'Successfully added new scope of work item.');
 		}
 
-		return redirect( route('jobs.proposals.show', [$job, $proposal]) );
+		return redirect( route('jobs.proposals.show', [$job, $proposal]) . '#scope' );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class JobProposalsScopesController extends Controller
 
 		$request->session()->flash('success', 'Successfully updated scope of work item.');
 
-		return redirect( route('jobs.proposals.show', [$job, $proposal]) );
+		return redirect( route('jobs.proposals.show', [$job, $proposal]) . '#scope' );
 	}
 
 	/**
@@ -130,6 +130,6 @@ class JobProposalsScopesController extends Controller
 
 		$request->session()->flash('success', 'Successfully deleted proposal scope of work item.');
 
-		return redirect( route('jobs.proposals.show', [$job, $proposal]) );
+		return redirect( route('jobs.proposals.show', [$job, $proposal]) . '#scope' );
 	}
 }

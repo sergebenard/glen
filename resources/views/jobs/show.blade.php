@@ -108,7 +108,7 @@
 				<div class="col-12">
 					<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 						<div class="card-header">
-							<a name="jobProposals"></a>
+							<a name="proposals"></a>
 							<div class="h5 mb-1">
 								Proposals
 							</div>
@@ -281,7 +281,7 @@
 				<div class="col-12">
 					<div class="card my-3 {{ ($job->isLate()) ? 'border-danger' : '' }}">
 						<div class="card-header">
-							<a name="jobInvoices"></a>
+							<a name="invoices"></a>
 							<div class="h5 mb-1">
 								Invoices
 							</div>
@@ -358,39 +358,27 @@
 										</button>
 										<div class="dropdown-menu">
 										@if( !empty( $job->email ) )
-											<form 	id="invoice-send-{{ $invoice->id }}" 
-													method="POST"
-													action="{{ route('jobs.invoices.send', [$job->id, $invoice->id]) }}"
-													enctype="multipart">
-												{{ csrf_field() }}
-											</form>
-											<button 	data-toggle="modal"
-														data-target="#confirmModal"
-														data-titletext = "Email Detailed Invoice"
-														data-formid="invoice-send-{{ $invoice->id }}"
+											<a 	href="{{ route('jobs.invoices.send', [$job->id, $invoice->id, 'detailed']) }}" 
 														class="dropdown-item">
 												Email detailed breakdown.
-											</button>
-											<button 	data-toggle="modal"
-														data-target="#confirmModal"
-														data-titletext = "Email Summary Invoice"
-														data-formid="invoice-send-{{ $invoice->id }}"
+											</a>
+											<a 	href="{{ route('jobs.invoices.send', [$job->id, $invoice->id, 'summary']) }}" 
 														class="dropdown-item">
 												Email summary only.
-											</button>
+											</a>
 											<div class="dropdown-divider"></div>
 										@endif
 											<a 	class="dropdown-item" 
 												href="{{ route('jobs.invoices.print', [$job->id, $invoice->id]) }}"
 												target="_blank">
-												Print <em>Snail Mail</em> proposal
+												Print <em>Snail Mail</em> invoice.
 											</a>
 											<button 	data-toggle="modal"
 														data-target="#confirmModal"
 														data-titletext = "Mark Mailed Invoice as {{ ( $invoice->sent ? 'Unsent' : 'Sent' ) }}"
 														data-formid="invoice-toggle-send-{{ $invoice->id }}"
 														class="dropdown-item">
-												Mark proposal as {{ ( $invoice->sent ? 'unsent' : 'sent' ) }}.
+												Mark as {{ ( $invoice->sent ? 'unsent' : 'sent' ) }}.
 											</button>
 										</div>
 										

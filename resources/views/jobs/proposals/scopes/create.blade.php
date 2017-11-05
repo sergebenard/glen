@@ -38,7 +38,7 @@
 		</div>
 
 		<button class="btn btn-primary" type="submit">Save New</button>
-		<a class="btn btn-outline-primary" href="{{ route('jobs.proposals.show', [$proposal->job->id, $proposal->id]) }}">
+		<a class="btn btn-outline-primary" href="{{ route('jobs.proposals.show', [$proposal->job->id, $proposal->id]) }}#scope">
 			Cancel
 		</a>
 	</form>

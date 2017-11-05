@@ -13,6 +13,7 @@
 
 @section('page-content')
 		<div class="card mb-3">
+			<a name="scope"></a>
 			<div class="card-header">
 				<h3>
 					Scope of Work
@@ -61,6 +62,7 @@
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="card">
+					<a name="materials"></a>
 					<div class="card-header">
 						<h3>
 							Materials
@@ -140,6 +142,7 @@
 			</div>
 			<div class="col-lg-6">
 				<div class="card">
+					<a name="labour"></a>
 					<div class="card-header">
 						<h3>
 							Labour

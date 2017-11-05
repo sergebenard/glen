@@ -61,7 +61,7 @@ class JobProposalsMaterialsController extends Controller
 
         $request->session()->flash('success', "Successfully created new material on proposal." );
         /*dd( "proposal ID: " . $proposal->id, "Route: " . route('jobs.proposals.show', [$job->id, $proposal->id]) );*/
-        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) );
+        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) . '#proposals' );
     }
 
     /**
@@ -121,7 +121,7 @@ class JobProposalsMaterialsController extends Controller
 
         //dd( 'Route: ' . route('jobs.proposals.show', [$job->id, $proposal->id]) );
 
-        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) );
+        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) . '#proposals' );
     }
 
     /**
@@ -138,6 +138,6 @@ class JobProposalsMaterialsController extends Controller
 
         $request->session()->flash('success', "Successfully deleted material from proposal.");
 
-        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) );
+        return redirect( route('jobs.proposals.show', [$job->id, $proposal->id]) . '#proposals' );
     }
 }

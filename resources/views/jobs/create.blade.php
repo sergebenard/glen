@@ -129,7 +129,7 @@
 		</div>
 
 		<button class="btn btn-primary" type="submit">Save New</button>
-		<a class="btn btn-outline-primary" href="{{ route('jobs.index') }}">
+		<a class="btn btn-outline-primary" href="{{ route('jobs.index') }}#jobActual">
 			Cancel
 		</a>
 	</form>

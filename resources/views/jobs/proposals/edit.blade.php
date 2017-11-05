@@ -74,7 +74,7 @@
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary" type="submit">Update</button>
-			<a class="btn btn-outline-primary" href="{{ route('jobs.show', $job->id) }}">
+			<a class="btn btn-outline-primary" href="{{ route('jobs.show', $job->id) }}#proposals">
 				Cancel
 			</a>
 		</div>

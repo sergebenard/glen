@@ -58,7 +58,7 @@ class JobInvoicesLabourController extends Controller
 
         $request->session()->flash('success', "Successfully created new labour entry on invoice." );
 
-        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) . '#invoices' );
     }
 
     /**
@@ -109,7 +109,7 @@ class JobInvoicesLabourController extends Controller
 
         $request->session()->flash('success', "Successfully updated labour entry on invoice." );
 
-        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) . '#invoices' );
     }
 
     /**
@@ -125,6 +125,6 @@ class JobInvoicesLabourController extends Controller
 
         $request->session()->flash('success', "Successfully deleted labour entry on invoice." );
 
-        return redirect( route('jobs.invoices.show', [$job, $invoice]) );
+        return redirect( route('jobs.invoices.show', [$job, $invoice]) . '#invoices' );
     }
 }
