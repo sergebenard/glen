@@ -87,7 +87,7 @@
 																<tr>
 																	<td class="data-table-amount" style="width: 85px;">
 																		<span>
-																			{{ number_format( $invoice->labour->sum('subtotal') + $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
+																			${{ number_format( $invoice->labour->sum('subtotal') + $invoice->materials->sum('subtotal'), 2, '.', '' ) }}
 																		</span>
 																	</td>
 																</tr>
