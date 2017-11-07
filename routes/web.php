@@ -12,10 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+        return view('welcome');
+    })->name('welcome');
 
 Auth::routes();
+
+Route::get('/preferences/{preference}', 'PreferencesController@show')->name('preferences.show');
+Route::get('/preferences/{preference}/edit', 'PreferencesController@edit')->name('preferences.edit');
+Route::patch('/preferences/{preference}', 'PreferencesController@update')->name('preferences.update');
 
 Route::resource(	'jobs/{job}/materials',
 					'JobMaterialsController',

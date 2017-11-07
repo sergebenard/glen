@@ -43,8 +43,8 @@
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<li class="dropdown-item">
-								<a class="nav-link" href="#">
-								Profile
+								<a class="nav-link" href="{{ route('preferences.show', 1) }}">
+									Site Preferences
 								</a>
 							</li>
 							<li class="dropdown-item">

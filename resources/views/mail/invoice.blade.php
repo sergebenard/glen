@@ -24,6 +24,12 @@
 										</b>
 									<br>
 									<span>Gatineau, Quebec</span>
+									<br>
+									<span>
+										<a href="{{ url('/') }}">
+											Website
+										</a>
+									</span>
 								</td>
 							</tr>
 
@@ -114,6 +120,10 @@
 												</b>
 												<br>
 												<span>Gatineau, Quebec</span>
+												<br>
+												<a href="{{ url('/') }}">
+													Website
+												</a>
 											</td>
 										</tr>
 									</table>
